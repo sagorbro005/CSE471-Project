@@ -50,4 +50,56 @@ class BlogController extends Controller
             'relatedBlogs' => $relatedBlogs
         ]);
     }
+
+    // Admin: Show all blogs (including drafts, etc.)
+    public function adminIndex()
+    {
+        $blogs = Blog::orderBy('created_at', 'desc')->get();
+        $categories = (new Blog)->getCategories();
+        return Inertia::render('admin/AdminBlogs', [
+            'blogs' => $blogs,
+            'categories' => $categories
+        ]);
+    }
+
+    // Admin: Store new blog (with image upload)
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'content' => 'required|string',
+            'status' => 'required|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('blogs', 'public');
+        }
+        Blog::create($validated);
+        return redirect()->route('admin.blogs')->with('success', 'Blog created successfully!');
+    }
+
+    // Admin: Update blog
+    public function update(Request $request, Blog $blog)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'content' => 'required|string',
+            'status' => 'required|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('blogs', 'public');
+        }
+        $blog->update($validated);
+        return redirect()->route('admin.blogs')->with('success', 'Blog updated successfully!');
+    }
+
+    // Admin: Delete blog
+    public function destroy(Blog $blog)
+    {
+        $blog->delete();
+        return redirect()->route('admin.blogs')->with('success', 'Blog deleted successfully!');
+    }
 }

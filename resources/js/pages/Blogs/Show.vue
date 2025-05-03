@@ -4,7 +4,7 @@
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <!-- Blog Header -->
         <div class="relative">
-          <img :src="blog.image" 
+          <img :src="blog.image ? `/storage/${blog.image}` : '/images/no-image.png'"
                :alt="blog.title" 
                class="w-full h-96 object-cover">
           <div class="absolute inset-0 bg-black bg-opacity-40"></div>

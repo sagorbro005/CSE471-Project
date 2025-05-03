@@ -36,11 +36,32 @@ Route::post('/support', [SupportController::class, 'store'])->name('support.stor
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
 Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
 
-
 // Prescription upload
 Route::get('/upload-prescription', [PrescriptionController::class, 'index'])->name('prescription.index');
 Route::post('/prescription/upload', [PrescriptionController::class, 'upload'])->name('prescription.upload');
 Route::get('/prescription/view', [PrescriptionController::class, 'view'])->name('prescription.view');
+
+// -------------------- ADMIN ROUTES --------------------
+Route::prefix('admin')->group(function () {
+    // Admin login (handled by Vue, so just a placeholder route)
+    Route::get('/login', function () {
+        return Inertia::render('admin/AdminLogin');
+    })->name('admin.login');
+
+    // Admin dashboard
+    Route::get('/dashboard', function () {
+        return Inertia::render('admin/AdminDashboard');
+    })->name('admin.dashboard');
+
+    // Admin blog CRUD
+    Route::get('/blogs', [\App\Http\Controllers\BlogController::class, 'adminIndex'])->name('admin.blogs');
+    Route::post('/blogs', [\App\Http\Controllers\BlogController::class, 'store'])->name('admin.blogs.store');
+    Route::post('/blogs/{blog}', [\App\Http\Controllers\BlogController::class, 'update'])->name('admin.blogs.update');
+    Route::delete('/blogs/{blog}', [\App\Http\Controllers\BlogController::class, 'destroy'])->name('admin.blogs.destroy');
+
+    // Admin support/issues management (fetches all issues)
+    Route::get('/support', [\App\Http\Controllers\SupportController::class, 'index'])->name('admin.support');
+});
 
 // Include other route files
 require __DIR__.'/settings.php';

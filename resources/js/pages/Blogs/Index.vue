@@ -43,7 +43,7 @@
         <div v-for="blog in filteredBlogs" 
              :key="blog.id" 
              class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-lg transition">
-          <img :src="blog.image" 
+          <img :src="blog.image ? `/storage/${blog.image}` : '/images/no-image.png'"
                :alt="blog.title"
                class="w-full h-48 object-cover">
           <div class="p-6">

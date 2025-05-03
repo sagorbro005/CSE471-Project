@@ -11,7 +11,15 @@ class SupportController extends Controller
     // Show the support page
     public function index()
     {
-        // Render the Vue Support page
+        // Fetch all support issues (latest first)
+        $issues = \App\Models\Support::orderBy('created_at', 'desc')->get();
+        // Render the Vue AdminSupport page for admin, otherwise render user support
+        if (request()->routeIs('admin.support')) {
+            return Inertia::render('admin/AdminSupport', [
+                'issues' => $issues
+            ]);
+        }
+        // Default: user support page
         return Inertia::render('Support');
     }
 
