@@ -24,7 +24,13 @@ const appName = import.meta.env.VITE_APP_NAME || 'MediMart';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
+    // Updated resolve logic: allow dot notation to match subfolders
+    resolve: (name) => {
+        return resolvePageComponent(
+            `./pages/${name.replace(/\./g, '/')}.vue`,
+            import.meta.glob<DefineComponent>('./pages/**/*.vue')
+        );
+    },
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
