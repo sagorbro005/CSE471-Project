@@ -4,6 +4,7 @@
       <ul>
         <li><router-link to="/admin/dashboard" active-class="active-link">Dashboard</router-link></li>
         <li><router-link to="/admin/blogs" active-class="active-link">Blogs</router-link></li>
+        <li><router-link to="/admin/users" active-class="active-link">Users</router-link></li>
         <li><router-link to="/admin/support" active-class="active-link">Support</router-link></li>
         <li><a href="#" @click.prevent="logout">Logout</a></li>
       </ul>

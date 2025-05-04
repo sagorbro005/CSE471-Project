@@ -45,7 +45,14 @@
                 <input type="text" v-model="cardForm.expiry" placeholder="MM/YY" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required />
                 <input type="text" v-model="cardForm.cvv" @input="onCVVInput" placeholder="CVV" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required />
               </div>
-              <button type="submit" @click="submitCard" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-base">Pay ৳{{ formatPrice(total) }}</button>
+              <button type="submit" @click="submitCard" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-base" :disabled="isSubmitting">
+                <span v-if="isSubmitting">
+                  <i class="fas fa-spinner fa-spin mr-2"></i> Processing...
+                </span>
+                <span v-else>
+                  Pay ৳{{ formatPrice(total) }}
+                </span>
+              </button>
             </div>
 
             <!-- Mobile Payment Fields -->
@@ -60,7 +67,14 @@
               <div>
                 <input type="text" v-model="mobileForm.phone" @input="onMobilePhoneInput" placeholder="Mobile Number" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 mb-4" required />
               </div>
-              <button type="submit" @click="submitMobile" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-base">Pay ৳{{ formatPrice(total) }}</button>
+              <button type="submit" @click="submitMobile" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-base" :disabled="isSubmitting">
+                <span v-if="isSubmitting">
+                  <i class="fas fa-spinner fa-spin mr-2"></i> Processing...
+                </span>
+                <span v-else>
+                  Pay ৳{{ formatPrice(total) }}
+                </span>
+              </button>
             </div>
 
             <!-- Cash on Delivery Message -->
@@ -69,7 +83,14 @@
                 <p class="font-medium">Cash on Delivery</p>
                 <p class="text-sm mt-1">You will pay ৳{{ formatPrice(total) }} when your order is delivered.</p>
               </div>
-              <button type="submit" @click="submitCOD" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-base">Place Order</button>
+              <button type="submit" @click="submitCOD" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-base" :disabled="isSubmitting">
+                <span v-if="isSubmitting">
+                  <i class="fas fa-spinner fa-spin mr-2"></i> Processing...
+                </span>
+                <span v-else>
+                  Place Order ৳{{ formatPrice(total) }}
+                </span>
+              </button>
             </div>
           </div>
         </form>
@@ -146,6 +167,7 @@ const couponSuccess = ref(false);
 const couponError = ref('');
 const couponApplied = ref(false);
 const discount = ref(0);
+const isSubmitting = ref(false);
 
 const total = computed(() => (props.subtotal || 0) + deliveryCharge.value);
 const finalTotal = computed(() => total.value - discount.value);
@@ -225,10 +247,24 @@ function submitCard(e) {
     delivery_charge: deliveryCharge.value,
     total: total.value
   };
+  isSubmitting.value = true;
   router.post(route('checkout.process'), payload, {
     preserveScroll: true,
-    onSuccess: () => { successMessage.value = 'Order placed successfully!'; },
-    onError: (errors) => { errorMessage.value = 'Failed to place order. Please check your input.'; }
+    onSuccess: () => { 
+      successMessage.value = 'Order placed successfully!'; 
+      setTimeout(() => {
+        router.visit(route('orders.index'));
+      }, 1000);
+    },
+    onError: (errors) => { 
+      errorMessage.value = 'Failed to place order. Please check your input.'; 
+      isSubmitting.value = false;
+    },
+    onFinish: () => {
+      if (errorMessage.value) {
+        isSubmitting.value = false;
+      }
+    }
   });
 }
 
@@ -249,10 +285,24 @@ function submitMobile(e) {
     delivery_charge: deliveryCharge.value,
     total: total.value
   };
+  isSubmitting.value = true;
   router.post(route('checkout.process'), payload, {
     preserveScroll: true,
-    onSuccess: () => { successMessage.value = 'Order placed successfully!'; },
-    onError: (errors) => { errorMessage.value = 'Failed to place order. Please check your input.'; }
+    onSuccess: () => { 
+      successMessage.value = 'Order placed successfully!'; 
+      setTimeout(() => {
+        router.visit(route('orders.index'));
+      }, 1000);
+    },
+    onError: (errors) => { 
+      errorMessage.value = 'Failed to place order. Please check your input.'; 
+      isSubmitting.value = false;
+    },
+    onFinish: () => {
+      if (errorMessage.value) {
+        isSubmitting.value = false;
+      }
+    }
   });
 }
 
@@ -271,10 +321,24 @@ function submitCOD(e) {
     delivery_charge: deliveryCharge.value,
     total: total.value
   };
+  isSubmitting.value = true;
   router.post(route('checkout.process'), payload, {
     preserveScroll: true,
-    onSuccess: () => { successMessage.value = 'Order placed successfully!'; },
-    onError: (errors) => { errorMessage.value = 'Failed to place order. Please check your input.'; }
+    onSuccess: () => { 
+      successMessage.value = 'Order placed successfully!'; 
+      setTimeout(() => {
+        router.visit(route('orders.index'));
+      }, 1000);
+    },
+    onError: (errors) => { 
+      errorMessage.value = 'Failed to place order. Please check your input.'; 
+      isSubmitting.value = false;
+    },
+    onFinish: () => {
+      if (errorMessage.value) {
+        isSubmitting.value = false;
+      }
+    }
   });
 }
 

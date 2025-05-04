@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\OrderController;
 
 // Home or Welcome page
 Route::get('/', function () {
@@ -47,6 +48,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/cart/{cart}', [\App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
     Route::post('/cart/clear', [\App\Http\Controllers\CartController::class, 'empty'])->name('cart.clear');
     Route::get('/checkout', [\App\Http\Controllers\CartController::class, 'checkout'])->name('cart.checkout');
+    
+    // Orders routes
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+    // Checkout process (order placement)
+    Route::post('/checkout/process', [OrderController::class, 'process'])->name('checkout.process');
 });
 
 // Support page
@@ -90,6 +97,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     // Admin support/issues management (fetches all issues)
     Route::get('/support', [\App\Http\Controllers\SupportController::class, 'index'])->name('admin.support');
+
+    // Admin Users Management
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/users', [\App\Http\Controllers\AdminUserController::class, 'index']);
+        Route::put('/users/{user}', [\App\Http\Controllers\AdminUserController::class, 'update']);
+    });
 });
 
 // Include other route files
