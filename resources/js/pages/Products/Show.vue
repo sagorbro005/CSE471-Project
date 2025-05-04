@@ -197,9 +197,19 @@ const formatDate = (dateString) => {
 };
 
 const addToCart = () => {
-  // This is a placeholder for the cart functionality
-  // In a real application, you would call an API to add the product to the cart
-  alert(`Added ${quantity.value} ${props.product.name}(s) to cart`);
+  // Use product.id for backend route model binding (not slug)
+  router.post(route('cart.add', props.product.id), {
+    quantity: quantity.value
+  }, {
+    preserveScroll: true,
+    onSuccess: () => {
+      alert(`Added ${quantity.value} ${props.product.name}(s) to cart successfully!`);
+    },
+    onError: (errors) => {
+      alert('Failed to add product to cart. Please try again.');
+      console.error(errors);
+    }
+  });
 };
 
 const submitReview = () => {

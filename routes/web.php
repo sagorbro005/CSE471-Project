@@ -39,6 +39,16 @@ Route::get('/products/{product}', [\App\Http\Controllers\ProductController::clas
 Route::post('/products/{product}/review', [\App\Http\Controllers\ProductController::class, 'review'])
     ->middleware(['auth'])->name('products.review');
 
+// Cart routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cart', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/{productId}/add', [\App\Http\Controllers\CartController::class, 'addToCart'])->name('cart.add');
+    Route::post('/cart/{cart}/update', [\App\Http\Controllers\CartController::class, 'updateQuantity'])->name('cart.update');
+    Route::delete('/cart/{cart}', [\App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/cart/clear', [\App\Http\Controllers\CartController::class, 'empty'])->name('cart.clear');
+    Route::get('/checkout', [\App\Http\Controllers\CartController::class, 'checkout'])->name('cart.checkout');
+});
+
 // Support page
 Route::get('/support', [SupportController::class, 'index'])->name('support.index');
 Route::post('/support', [SupportController::class, 'store'])->name('support.store');

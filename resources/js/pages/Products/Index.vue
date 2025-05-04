@@ -157,9 +157,19 @@ const selectCategory = (categorySlug) => {
 };
 
 const addToCart = (product) => {
-  // This is a placeholder for the cart functionality
-  // In a real application, you would call an API to add the product to the cart
-  alert(`Added ${product.name} to cart`);
+  // Real implementation: send request to backend to add to cart
+  router.post(route('cart.add', product.id), {
+    quantity: 1 // Default to 1, or allow user to select
+  }, {
+    preserveScroll: true,
+    onSuccess: () => {
+      alert(`Added ${product.name} to cart successfully!`);
+    },
+    onError: (errors) => {
+      alert('Failed to add product to cart. Please try again.');
+      console.error(errors);
+    }
+  });
 };
 
 // Watch for changes in search query (for immediate search)
