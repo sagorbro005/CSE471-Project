@@ -3,10 +3,10 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <!-- Back Button -->
       <div class="mb-6">
-        <router-link to="/orders" class="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200">
+        <Link :href="route('orders.index')" class="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200">
           <i class="fas fa-arrow-left mr-2"></i>
           Back to Orders
-        </router-link>
+        </Link>
       </div>
       <!-- Order Header -->
       <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-t-xl p-6 md:p-8">
@@ -16,7 +16,7 @@
             <div class="mt-2 space-y-1">
               <p class="text-blue-100">
                 <i class="far fa-clock mr-2"></i>
-                Placed on {{ order.placed_at }}
+                Placed on {{ formatBangladeshDate(order.placed_at) }}
               </p>
               <p class="text-blue-100">
                 <i :class="order.payment_icon + ' mr-2'"></i>
@@ -44,8 +44,8 @@
           </h2>
           <div class="space-y-4">
             <div v-for="item in order.items" :key="item.id" class="flex items-center space-x-4 p-4 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300">
-              <img :src="item.image" alt="Product Image" class="w-16 h-16 rounded object-cover" />
-              <div class="flex-1">
+              <img :src="item.image ? `/storage/${item.image}` : '/images/placeholder.png'" alt="Product Image" class="w-16 h-16 rounded object-cover" />
+              <div class="flex-1 min-w-0">
                 <div class="font-medium text-gray-900">{{ item.name }}</div>
                 <div class="text-sm text-gray-500">Quantity: {{ item.quantity }}</div>
               </div>
@@ -64,6 +64,10 @@
               <div class="flex justify-between">
                 <span class="text-gray-600">Delivery Fee</span>
                 <span>৳{{ formatPrice(order.delivery_charge) }}</span>
+              </div>
+              <div v-if="order.discount && order.discount > 0" class="flex justify-between text-green-600 font-medium">
+                <span>Discount <span v-if="order.coupon_code">({{ order.coupon_code }})</span></span>
+                <span>-৳{{ formatPrice(order.discount) }}</span>
               </div>
               <div class="pt-3 border-t border-gray-200 flex justify-between text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 <span>Total</span>
@@ -100,10 +104,10 @@
               <i class="fas fa-star mr-2"></i>
               Rate Products
             </button>
-            <button class="inline-flex items-center px-6 py-3 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <Link :href="route('support.index')" class="inline-flex items-center px-6 py-3 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
               <i class="fas fa-question-circle mr-2"></i>
               Need Help?
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -111,6 +115,8 @@
   </div>
 </template>
 <script setup>
+import { Link } from '@inertiajs/vue3'
+import { route } from 'ziggy-js'
 // Order details page for a single order
 // Expects a prop `order` with all order info (see below)
 const props = defineProps({
@@ -118,6 +124,22 @@ const props = defineProps({
 });
 function formatPrice(price) {
   return Number(price).toFixed(2);
+}
+// Format date/time as Bangladesh Standard Time
+function formatBangladeshDate(dateString) {
+  const date = new Date(dateString);
+  // Convert to Bangladesh time (UTC+6)
+  const utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+  const bdTime = new Date(utc + (6 * 60 * 60 * 1000));
+  // Format: 06 May 2025, 02:57 AM
+  return bdTime.toLocaleString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  });
 }
 function statusClass(status) {
   switch (status) {
@@ -132,6 +154,7 @@ function statusClass(status) {
 <style scoped>
 .bg-clip-text {
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 </style>

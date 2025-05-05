@@ -17,7 +17,7 @@
           </span>
         </div>
         <template v-if="orders.length">
-          <OrderCard v-for="order in orders" :key="order.id" :order="order" @view-details="viewDetails" />
+          <OrderCard v-for="order in formattedOrders" :key="order.id" :order="order" @view-details="viewDetails" />
         </template>
         <template v-else>
           <EmptyState />
@@ -32,10 +32,11 @@
 <script setup>
 // Orders page for customers
 // This component expects a prop `orders` which is an array of order objects from the backend
-// Each order object should have: id, status, formatted_date, total, items_count, payment_icon, payment_text, payment_status, progress
+// Each order object should have: id, status, placed_at, total, items (array), payment_icon, payment_text, payment_status, progress
 import OrderCard from './OrderCard.vue'
 import EmptyState from './EmptyState.vue'
 import { Link, usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
 import { route } from 'ziggy-js'
 
 // Define props with default value
@@ -49,9 +50,20 @@ const props = defineProps({
 // Access page props for flash messages
 const page = usePage();
 
+// Format orders for display (add items_count, formatted_date, progress)
+const formattedOrders = computed(() => {
+  return props.orders.map(order => ({
+    ...order,
+    items_count: order.items ? order.items.length : (order.products ? order.products.length : 0),
+    formatted_date: order.placed_at || order.created_at,
+    progress: getOrderProgress(order.status)
+  }));
+});
+
 // View order details
 function viewDetails(orderId) {
   // Use Inertia navigation for order details
+  // Fallback to Inertia's global router object
   window.location.href = route('orders.show', orderId);
 }
 
@@ -70,6 +82,17 @@ function statusClass(status) {
     case 'Shipped': return 'bg-purple-100 text-purple-800';
     case 'Delivered': return 'bg-green-100 text-green-800';
     default: return 'bg-gray-100 text-gray-800';
+  }
+}
+
+// Helper for progress bar
+function getOrderProgress(status) {
+  switch (status) {
+    case 'Pending': return 10;
+    case 'Processing': return 40;
+    case 'Shipped': return 70;
+    case 'Delivered': return 100;
+    default: return 0;
   }
 }
 </script>

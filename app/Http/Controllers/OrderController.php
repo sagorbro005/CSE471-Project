@@ -25,6 +25,9 @@ class OrderController extends Controller
             ->orderByDesc('created_at')
             ->get();
             
+        // Log orders for debugging
+        \Log::info('Retrieved orders count: ' . $orders->count(), ['user_id' => Auth::id()]);
+            
         // If no orders found, create a sample order for display purposes
         if ($orders->isEmpty() && config('app.env') === 'local') {
             // This is just for development to show how orders will look
@@ -33,11 +36,30 @@ class OrderController extends Controller
                 'status' => 'Processing',
                 'formatted_date' => now()->format('d M Y, h:i A'),
                 'total' => 2500.00,
+                'subtotal' => 2000.00,
+                'delivery_charge' => 500.00,
                 'items_count' => 3,
                 'payment_icon' => 'fas fa-credit-card',
                 'payment_text' => 'Card',
                 'payment_status' => 'Paid',
                 'progress' => 40,
+                'products' => [
+                    [
+                        'id' => 1,
+                        'name' => 'Product 1',
+                        'quantity' => 2,
+                        'price' => 1000.00,
+                        'image' => 'product1.jpg',
+                    ],
+                    [
+                        'id' => 2,
+                        'name' => 'Product 2',
+                        'quantity' => 1,
+                        'price' => 500.00,
+                        'image' => 'product2.jpg',
+                    ],
+                ],
+                'placed_at' => now()->format('F j, Y h:i A'),
             ];
             
             return Inertia::render('Orders/Index', [
@@ -50,18 +72,30 @@ class OrderController extends Controller
             return [
                 'id' => $order->id,
                 'status' => $order->status,
-                'formatted_date' => $order->created_at->format('d M Y, h:i A'),
-                'total' => $order->total,
-                'items_count' => $order->items->count(),
+                'payment_method' => $order->payment_method,
+                'payment_status' => $order->payment_status,
                 'payment_icon' => $this->getPaymentIcon($order),
                 'payment_text' => $this->getPaymentText($order),
-                'payment_status' => $order->payment_status,
+                'total' => $order->total,
+                'subtotal' => $order->subtotal,
+                'delivery_charge' => $order->delivery_charge,
+                'items_count' => $order->items->count(),
+                'items' => $order->items->map(function($item) {
+                    return [
+                        'id' => $item->id,
+                        'name' => $item->name,
+                        'quantity' => $item->quantity,
+                        'price' => $item->price,
+                        'image' => $item->image,
+                    ];
+                }),
+                'placed_at' => $order->created_at->format('F j, Y h:i A'),
                 'progress' => $this->getOrderProgress($order->status),
             ];
         });
         
         // DEBUG: Log number of orders retrieved
-        \Log::info('Orders retrieved for user', ['user_id' => Auth::id(), 'count' => $orders->count()]);
+        \Log::info('Orders retrieved for user', ['user_id' => Auth::id(), 'count' => $orders->count(), 'formatted_count' => $formattedOrders->count()]);
         
         return Inertia::render('Orders/Index', [
             'orders' => $formattedOrders
@@ -75,29 +109,34 @@ class OrderController extends Controller
             ->where('user_id', Auth::id())
             ->with(['items'])
             ->firstOrFail();
+        // Format order for frontend
+        $orderData = [
+            'id' => $order->id,
+            'status' => $order->status,
+            'placed_at' => $order->created_at->format('F j, Y h:i A'),
+            'total' => $order->total,
+            'subtotal' => $order->subtotal,
+            'delivery_charge' => $order->delivery_charge,
+            'discount' => $order->discount ?? 0,
+            'coupon_code' => $order->coupon_code ?? null,
+            'delivery_address' => $order->delivery_address,
+            'contact_phone' => $order->contact_phone,
+            'payment_icon' => $this->getPaymentIcon($order),
+            'payment_text' => $this->getPaymentText($order),
+            'payment_status' => $order->payment_status,
+            'status_class' => $this->getOrderStatusClass($order->status),
+            'items' => $order->items->map(function($item) {
+                return [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'quantity' => $item->quantity,
+                    'price' => $item->price,
+                    'image' => $item->image,
+                ];
+            }),
+        ];
         return Inertia::render('Orders/Show', [
-            'order' => [
-                'id' => $order->id,
-                'status' => $order->status,
-                'placed_at' => $order->created_at->format('d M Y, h:i A'),
-                'payment_icon' => $this->getPaymentIcon($order),
-                'payment_text' => $this->getPaymentText($order),
-                'payment_status' => $order->payment_status,
-                'subtotal' => $order->subtotal,
-                'delivery_charge' => $order->delivery_charge,
-                'total' => $order->total,
-                'delivery_address' => $order->delivery_address,
-                'contact_phone' => $order->contact_phone,
-                'items' => $order->items->map(function($item) {
-                    return [
-                        'id' => $item->id,
-                        'name' => $item->name,
-                        'image' => $item->image,
-                        'price' => $item->price,
-                        'quantity' => $item->quantity,
-                    ];
-                }),
-            ]
+            'order' => $orderData
         ]);
     }
 
@@ -205,6 +244,16 @@ class OrderController extends Controller
             case 'Shipped': return 70;
             case 'Delivered': return 100;
             default: return 0;
+        }
+    }
+    private function getOrderStatusClass($status)
+    {
+        switch ($status) {
+            case 'Pending': return 'badge-secondary';
+            case 'Processing': return 'badge-info';
+            case 'Shipped': return 'badge-primary';
+            case 'Delivered': return 'badge-success';
+            default: return 'badge-dark';
         }
     }
 }

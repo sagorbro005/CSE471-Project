@@ -33,6 +33,12 @@
               <i class="fas fa-shopping-bag text-blue-500 mr-2"></i>
               <span>{{ order.items_count }} items</span>
             </div>
+            <div class="flex flex-col gap-1 mt-2 w-full">
+              <div v-for="item in order.items" :key="item.id" class="flex items-center justify-between text-sm text-gray-600">
+                <span class="truncate">{{ item.name }} (x{{ item.quantity }})</span>
+                <span>৳{{ formatPrice(item.price * item.quantity) }}</span>
+              </div>
+            </div>
             <div class="flex items-center text-gray-700 bg-purple-50 px-3 py-1 rounded-lg">
               <i :class="order.payment_icon + ' mr-2'"></i>
               <span>{{ order.payment_text }}</span>

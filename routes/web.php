@@ -48,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/cart/{cart}', [\App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
     Route::post('/cart/clear', [\App\Http\Controllers\CartController::class, 'empty'])->name('cart.clear');
     Route::get('/checkout', [\App\Http\Controllers\CartController::class, 'checkout'])->name('cart.checkout');
-    
+
     // Orders routes
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
@@ -57,17 +57,21 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Support page
-Route::get('/support', [SupportController::class, 'index'])->name('support.index');
-Route::post('/support', [SupportController::class, 'store'])->name('support.store');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/support', [SupportController::class, 'index'])->name('support.index');
+    Route::post('/support', [SupportController::class, 'store'])->name('support.store');
+});
 
 // Blogs (public)
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
 Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
 
 // Prescription upload
-Route::get('/upload-prescription', [PrescriptionController::class, 'index'])->name('prescription.index');
-Route::post('/prescription/upload', [PrescriptionController::class, 'upload'])->name('prescription.upload');
-Route::get('/prescription/view', [PrescriptionController::class, 'view'])->name('prescription.view');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/upload-prescription', [PrescriptionController::class, 'index'])->name('prescription.index');
+    Route::post('/prescription/upload', [PrescriptionController::class, 'upload'])->name('prescription.upload');
+    Route::get('/prescription/view', [PrescriptionController::class, 'view'])->name('prescription.view');
+});
 
 // -------------------- ADMIN ROUTES --------------------
 Route::prefix('admin')->middleware(['auth'])->group(function () {

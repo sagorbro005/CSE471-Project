@@ -5,20 +5,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->string('card_type')->nullable();
-            $table->string('card_number')->nullable();
-            $table->string('expiry')->nullable();
-            $table->string('cvv')->nullable();
-            $table->string('mobile_payment')->nullable();
-        });
+        // All payment detail fields are now present in the main orders table migration.
+        // This migration is now redundant and intentionally left blank to avoid duplicate column errors.
     }
+
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn(['card_type', 'card_number', 'expiry', 'cvv', 'mobile_payment']);
-        });
+        // No action needed.
     }
 };

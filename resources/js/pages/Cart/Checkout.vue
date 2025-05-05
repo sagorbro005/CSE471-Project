@@ -50,7 +50,7 @@
                   <i class="fas fa-spinner fa-spin mr-2"></i> Processing...
                 </span>
                 <span v-else>
-                  Pay ৳{{ formatPrice(total) }}
+                  Pay ৳{{ formatPrice(finalTotal) }}
                 </span>
               </button>
             </div>
@@ -72,7 +72,7 @@
                   <i class="fas fa-spinner fa-spin mr-2"></i> Processing...
                 </span>
                 <span v-else>
-                  Pay ৳{{ formatPrice(total) }}
+                  Pay ৳{{ formatPrice(finalTotal) }}
                 </span>
               </button>
             </div>
@@ -81,14 +81,14 @@
             <div v-if="activeTab === 'cod'" class="space-y-6">
               <div class="bg-yellow-50 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4">
                 <p class="font-medium">Cash on Delivery</p>
-                <p class="text-sm mt-1">You will pay ৳{{ formatPrice(total) }} when your order is delivered.</p>
+                <p class="text-sm mt-1">You will pay ৳{{ formatPrice(finalTotal) }} when your order is delivered.</p>
               </div>
               <button type="submit" @click="submitCOD" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-base" :disabled="isSubmitting">
                 <span v-if="isSubmitting">
                   <i class="fas fa-spinner fa-spin mr-2"></i> Processing...
                 </span>
                 <span v-else>
-                  Place Order ৳{{ formatPrice(total) }}
+                  Place Order ৳{{ formatPrice(finalTotal) }}
                 </span>
               </button>
             </div>
@@ -245,7 +245,7 @@ function submitCard(e) {
     cart: props.cartItems,
     subtotal: props.subtotal,
     delivery_charge: deliveryCharge.value,
-    total: total.value
+    total: finalTotal.value
   };
   isSubmitting.value = true;
   router.post(route('checkout.process'), payload, {
@@ -283,7 +283,7 @@ function submitMobile(e) {
     cart: props.cartItems,
     subtotal: props.subtotal,
     delivery_charge: deliveryCharge.value,
-    total: total.value
+    total: finalTotal.value
   };
   isSubmitting.value = true;
   router.post(route('checkout.process'), payload, {
@@ -319,7 +319,7 @@ function submitCOD(e) {
     cart: props.cartItems,
     subtotal: props.subtotal,
     delivery_charge: deliveryCharge.value,
-    total: total.value
+    total: finalTotal.value
   };
   isSubmitting.value = true;
   router.post(route('checkout.process'), payload, {
