@@ -98,6 +98,11 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     // Admin support/issues management (fetches all issues)
     Route::get('/support', [\App\Http\Controllers\SupportController::class, 'index'])->name('admin.support');
 
+    // Admin Prescription Management
+    Route::get('/prescriptions', [\App\Http\Controllers\Admin\PrescriptionController::class, 'index'])->name('admin.prescriptions');
+    Route::get('/prescriptions/{id}', [\App\Http\Controllers\Admin\PrescriptionController::class, 'show'])->name('admin.prescriptions.show');
+    Route::patch('/prescriptions/{id}/status', [\App\Http\Controllers\Admin\PrescriptionController::class, 'updateStatus'])->name('admin.prescriptions.status');
+
     // Admin Users Management
     Route::middleware(['auth'])->group(function () {
         Route::get('/users', [\App\Http\Controllers\AdminUserController::class, 'index']);

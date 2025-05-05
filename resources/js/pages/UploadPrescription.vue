@@ -214,7 +214,7 @@ export default {
                 })
                 formData.append('notes', this.notes)
 
-                router.post(route('prescription.store'), formData, {
+                router.post(route('prescription.upload'), formData, {
                     onSuccess: () => {
                         this.successMessage = 'Prescription uploaded successfully! One Medimart representative will call you shortly for confirming this order.'
                         this.files = []

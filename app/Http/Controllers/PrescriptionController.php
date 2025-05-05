@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Prescription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -27,13 +28,21 @@ class PrescriptionController extends Controller
             $prescriptionFiles = $request->file('prescriptions');
             $prescriptions = [];
 
+            // Create a single order for all uploaded prescriptions
+            $order = Order::create([
+                'user_id' => auth()->id(),
+                'status' => 'pending',
+                // Add other required order fields if necessary (set default or null)
+            ]);
+
             foreach ($prescriptionFiles as $file) {
                 try {
                     $imagePath = $file->store('prescriptions', 'public');
 
-                    // Create prescription record
+                    // Create prescription record linked to the order
                     $prescriptions[] = Prescription::create([
                         'user_id' => auth()->id(),
+                        'order_id' => $order->id,
                         'image_path' => $imagePath,
                         'notes' => $request->notes,
                         'status' => 'pending'
@@ -44,6 +53,7 @@ class PrescriptionController extends Controller
                         Storage::disk('public')->delete($prescription->image_path);
                         $prescription->delete();
                     }
+                    $order->delete();
                     throw $e;
                 }
             }

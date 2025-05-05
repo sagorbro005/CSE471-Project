@@ -9,14 +9,27 @@ use Inertia\Inertia;
 class SupportController extends Controller
 {
     // Show the support page
-    public function index()
+    public function index(Request $request)
     {
-        // Fetch all support issues (latest first)
-        $issues = \App\Models\Support::orderBy('created_at', 'desc')->get();
+        // Fetch all support issues (latest first) with search functionality
+        $query = \App\Models\Support::query();
+        if ($request->search) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', '%'.$request->search.'%')
+                  ->orWhere('email', 'like', '%'.$request->search.'%')
+                  ->orWhere('phone', 'like', '%'.$request->search.'%')
+                  ->orWhere('subject', 'like', '%'.$request->search.'%')
+                  ->orWhere('message', 'like', '%'.$request->search.'%');
+            });
+        }
+        $issues = $query->orderBy('created_at', 'desc')->paginate(12)->withQueryString();
         // Render the Vue AdminSupport page for admin, otherwise render user support
         if (request()->routeIs('admin.support')) {
             return Inertia::render('admin/AdminSupport', [
-                'issues' => $issues
+                'issues' => $issues,
+                'filters' => [
+                    'search' => $request->search,
+                ],
             ]);
         }
         // Default: user support page

@@ -31,6 +31,12 @@ class Prescription extends Model
         return $this->belongsTo(User::class);
     }
 
+    // Define relationship with Order
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
     // Get the full URL for the prescription image
     public function getImageUrlAttribute()
     {
