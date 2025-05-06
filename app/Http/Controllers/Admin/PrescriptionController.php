@@ -26,10 +26,12 @@ class PrescriptionController extends Controller
                 $q->where('status', $request->status);
             });
 
-        // Group prescriptions by order_id and eager load all prescriptions for each order
+        // Only get orders that have at least one prescription (i.e., orders placed via Upload Prescription)
         $ordersQuery = \App\Models\Order::with(['user', 'prescriptions' => function($q) {
             $q->orderBy('created_at');
-        }]);
+        }])
+        ->whereHas('prescriptions') // Only orders with at least one prescription
+        ;
         // Apply search filter to orders by customer name/email/phone
         if ($request->search) {
             $ordersQuery->whereHas('user', function($uq) use ($request) {

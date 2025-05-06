@@ -20,10 +20,9 @@
               </p>
               <p class="text-blue-100">
                 <i :class="order.payment_icon + ' mr-2'"></i>
-                Payment via {{ order.payment_text }}
-                <span v-if="order.payment_status" class="ml-2 px-2 py-1 bg-green-500 bg-opacity-25 rounded-full text-xs border border-green-400">
-                  {{ order.payment_status }}
-                </span>
+                <span>{{ order.payment_text }}</span>
+                <span v-if="paymentStatusDisplay" class="ml-4"><i class="fas fa-check-circle text-pink-200 mr-1"></i>{{ paymentStatusDisplay }}</span>
+                <span v-else class="ml-4 text-gray-300"><i class="fas fa-ban mr-1"></i>N/A</span>
               </p>
             </div>
           </div>
@@ -117,10 +116,24 @@
 <script setup>
 import { Link } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
+import { computed } from 'vue';
 // Order details page for a single order
 // Expects a prop `order` with all order info (see below)
 const props = defineProps({
   order: Object
+});
+const paymentStatusDisplay = computed(() => {
+  const paymentMethod = (props.order.payment_method || '').toLowerCase();
+  const status = props.order.status;
+  if (["mobile payment", "card payment", "mobile", "card"].includes(paymentMethod)) {
+    if (status === 'Cancelled') return '';
+    return 'Paid';
+  } else {
+    if (status === 'Delivered') return 'Paid';
+    if (status === 'Pending' || status === 'Processing') return 'Pending';
+    if (status === 'Cancelled') return '';
+  }
+  return '';
 });
 function formatPrice(price) {
   return Number(price).toFixed(2);

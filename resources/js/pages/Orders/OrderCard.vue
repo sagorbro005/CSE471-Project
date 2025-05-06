@@ -43,9 +43,13 @@
               <i :class="order.payment_icon + ' mr-2'"></i>
               <span>{{ order.payment_text }}</span>
             </div>
-            <div v-if="order.payment_status" class="flex items-center text-gray-700 bg-pink-50 px-3 py-1 rounded-lg">
+            <div v-if="paymentStatusDisplay" class="flex items-center text-gray-700 bg-pink-50 px-3 py-1 rounded-lg">
               <i class="fas fa-check-circle text-pink-400 mr-2"></i>
-              <span>{{ order.payment_status }}</span>
+              <span>{{ paymentStatusDisplay }}</span>
+            </div>
+            <div v-else class="flex items-center text-gray-400 bg-gray-50 px-3 py-1 rounded-lg">
+              <i class="fas fa-ban mr-2"></i>
+              <span>N/A</span>
             </div>
           </div>
         </div>
@@ -82,6 +86,22 @@
 <script setup>
 // Define props for the component
 const props = defineProps({ order: Object });
+
+import { computed } from 'vue';
+
+const paymentStatusDisplay = computed(() => {
+  const paymentMethod = (props.order.payment_method || '').toLowerCase();
+  const status = props.order.status;
+  if (["mobile payment", "card payment", "mobile", "card"].includes(paymentMethod)) {
+    if (status === 'Cancelled') return '';
+    return 'Paid';
+  } else {
+    if (status === 'Delivered') return 'Paid';
+    if (status === 'Pending' || status === 'Processing') return 'Pending';
+    if (status === 'Cancelled') return '';
+  }
+  return '';
+});
 
 // Function to format price
 function formatPrice(price) {

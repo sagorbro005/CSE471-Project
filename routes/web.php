@@ -88,6 +88,11 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::post('/products/{product}', [\App\Http\Controllers\Admin\ProductController::class, 'update'])->name('admin.products.update');
     Route::delete('/products/{product}', [\App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('admin.products.delete');
 
+    // Admin Orders (product orders only)
+    Route::get('/orders', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('admin.orders');
+    Route::get('/orders/{id}', [\App\Http\Controllers\Admin\OrderController::class, 'show'])->name('admin.orders.show');
+    Route::patch('/orders/{id}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('admin.orders.status');
+
     // Admin dashboard
     Route::get('/dashboard', function () {
         return Inertia::render('admin/AdminDashboard');

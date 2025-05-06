@@ -19,8 +19,9 @@ class OrderController extends Controller
             return redirect()->route('login')->with('error', 'Please login to view your orders.');
         }
         
-        // Get all orders for the current user
+        // Get all orders for the current user, EXCLUDING prescription orders
         $orders = Order::where('user_id', Auth::id())
+            ->whereDoesntHave('prescriptions') // Exclude orders with any prescription
             ->with(['items'])
             ->orderByDesc('created_at')
             ->get();
@@ -67,19 +68,17 @@ class OrderController extends Controller
             ]);
         }
         
-        // Format orders for the frontend
-        $formattedOrders = $orders->map(function($order) {
+        // Format orders for frontend (include status, subtotal, delivery_charge, total, payment_method, payment_status)
+        $orders = $orders->map(function($order) {
             return [
                 'id' => $order->id,
                 'status' => $order->status,
-                'payment_method' => $order->payment_method,
-                'payment_status' => $order->payment_status,
-                'payment_icon' => $this->getPaymentIcon($order),
-                'payment_text' => $this->getPaymentText($order),
-                'total' => $order->total,
                 'subtotal' => $order->subtotal,
                 'delivery_charge' => $order->delivery_charge,
-                'items_count' => $order->items->count(),
+                'total' => $order->total,
+                'payment_method' => $order->payment_method,
+                'payment_status' => $order->payment_status,
+                'placed_at' => $order->created_at->timezone('Asia/Dhaka')->format('Y-m-d H:i:s'),
                 'items' => $order->items->map(function($item) {
                     return [
                         'id' => $item->id,
@@ -89,16 +88,14 @@ class OrderController extends Controller
                         'image' => $item->image,
                     ];
                 }),
-                'placed_at' => $order->created_at->format('F j, Y h:i A'),
-                'progress' => $this->getOrderProgress($order->status),
             ];
         });
         
         // DEBUG: Log number of orders retrieved
-        \Log::info('Orders retrieved for user', ['user_id' => Auth::id(), 'count' => $orders->count(), 'formatted_count' => $formattedOrders->count()]);
+        \Log::info('Orders retrieved for user', ['user_id' => Auth::id(), 'count' => $orders->count()]);
         
         return Inertia::render('Orders/Index', [
-            'orders' => $formattedOrders
+            'orders' => $orders
         ]);
     }
 
