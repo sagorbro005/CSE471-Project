@@ -42,6 +42,6 @@ Route::get('/upload-prescription', [PrescriptionController::class, 'index'])->na
 Route::post('/prescription/upload', [PrescriptionController::class, 'upload'])->name('prescription.upload');
 Route::get('/prescription/view', [PrescriptionController::class, 'view'])->name('prescription.view');
 
-// Include other route files
+// Include other route filesS
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
