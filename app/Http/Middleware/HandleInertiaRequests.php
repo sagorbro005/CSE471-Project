@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Cart;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -39,6 +40,12 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
+        // Get cart count for the authenticated user
+        $cartCount = 0;
+        if ($request->user()) {
+            $cartCount = Cart::where('user_id', $request->user()->id)->sum('quantity');
+        }
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -46,6 +53,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'cartCount' => $cartCount,
             'ziggy' => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),

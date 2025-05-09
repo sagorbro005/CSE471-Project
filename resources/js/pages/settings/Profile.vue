@@ -4,6 +4,7 @@ import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import DeleteUser from '@/components/DeleteUser.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import InputError from '@/components/InputError.vue';
+import NavBar from '@/components/NavBar.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -57,10 +58,12 @@ const submit = () => {
 </script>
 
 <template>
-    <AppLayout :breadcrumbs="breadcrumbs">
-        <Head title="Profile settings" />
+    <div>
+        <NavBar />
+        <AppLayout :breadcrumbs="breadcrumbs">
+            <Head title="Profile settings" />
 
-        <SettingsLayout>
+            <SettingsLayout>
             <div class="flex flex-col space-y-6">
                 <HeadingSmall title="Profile information" description="Update your profile information" />
 
@@ -78,12 +81,12 @@ const submit = () => {
                     <!-- Name field -->
                     <div class="grid gap-2">
                         <Label for="name">Name</Label>
-                        <Input 
-                            id="name" 
-                            v-model="form.name" 
-                            required 
-                            autocomplete="name" 
-                            placeholder="Full name" 
+                        <Input
+                            id="name"
+                            v-model="form.name"
+                            required
+                            autocomplete="name"
+                            placeholder="Full name"
                         />
                         <InputError :message="form.errors.name" />
                     </div>
@@ -121,10 +124,10 @@ const submit = () => {
                     <!-- Date of Birth field -->
                     <div class="grid gap-2">
                         <Label for="date_of_birth">Date of Birth</Label>
-                        <Input 
-                            id="date_of_birth" 
-                            type="date" 
-                            v-model="form.date_of_birth" 
+                        <Input
+                            id="date_of_birth"
+                            type="date"
+                            v-model="form.date_of_birth"
                         />
                         <InputError :message="form.errors.date_of_birth" />
                     </div>
@@ -132,10 +135,10 @@ const submit = () => {
                     <!-- Phone field -->
                     <div class="grid gap-2">
                         <Label for="phone">Phone Number</Label>
-                        <Input 
-                            id="phone" 
-                            type="tel" 
-                            v-model="form.phone" 
+                        <Input
+                            id="phone"
+                            type="tel"
+                            v-model="form.phone"
                             placeholder="+880 1XXX-XXXXXX"
                         />
                         <InputError :message="form.errors.phone" />
@@ -190,6 +193,7 @@ const submit = () => {
             </div>
 
             <DeleteUser />
-        </SettingsLayout>
-    </AppLayout>
+            </SettingsLayout>
+        </AppLayout>
+    </div>
 </template>

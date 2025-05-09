@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <div class="container mx-auto px-4 py-8">
     <!-- Search and Category Navigation -->
     <div class="mb-8 space-y-6">
@@ -105,12 +106,15 @@
       <Pagination :links="products.links" />
     </div>
   </div>
+  <Footer />
 </template>
 
 <script setup>
 import { ref, computed, watch } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import Pagination from '@/components/Pagination.vue';
+import NavBar from '@/components/NavBar.vue';
+import Footer from '@/components/Footer.vue';
 
 // Props from controller
 const props = defineProps({
@@ -157,12 +161,13 @@ const selectCategory = (categorySlug) => {
 };
 
 const addToCart = (product) => {
-  // Real implementation: send request to backend to add to cart
+  // Send request to backend to add to cart
   router.post(route('cart.add', product.id), {
     quantity: 1 // Default to 1, or allow user to select
   }, {
     preserveScroll: true,
     onSuccess: () => {
+      // Show success message (optional - you can remove this if you don't want alerts)
       alert(`Added ${product.name} to cart successfully!`);
     },
     onError: (errors) => {

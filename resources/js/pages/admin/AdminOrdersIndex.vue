@@ -1,5 +1,6 @@
 <template>
-  <div class="container mx-auto px-4 py-6">
+  <AdminLayout>
+    <div class="container mx-auto px-4 py-6">
     <!-- Search and Filter -->
     <div class="mb-6 flex gap-4">
       <input
@@ -100,13 +101,19 @@
       <button v-if="orders.next_page_url" @click="fetchOrdersByUrl(orders.next_page_url)" class="mx-1 px-3 py-1 bg-gray-200 rounded">Next</button>
     </div>
   </div>
+</AdminLayout>
 </template>
 
 <script>
 // AdminOrdersIndex.vue
 // Shows all product orders for admin with search, filter, status update, and pagination
+import AdminLayout from '@/layouts/AdminLayout.vue';
+
 export default {
   name: 'AdminOrdersIndex',
+  components: {
+    AdminLayout
+  },
   props: {
     orders: Object
   },

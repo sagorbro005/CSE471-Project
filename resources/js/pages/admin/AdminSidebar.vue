@@ -1,54 +1,151 @@
 <template>
   <div class="admin-sidebar">
+    <!-- Logo and Header Section -->
+    <div class="sidebar-header">
+      <img src="/logo/Medimart.png" alt="Medimart Logo" class="sidebar-logo">
+      <h3 class="sidebar-title">Admin Panel</h3>
+    </div>
+
     <nav>
       <ul>
-        <li><router-link to="/admin/dashboard" active-class="active-link">Dashboard</router-link></li>
-        <li><router-link to="/admin/blogs" active-class="active-link">Blogs</router-link></li>
-        <li><router-link to="/admin/users" active-class="active-link">Users</router-link></li>
-        <li><router-link to="/admin/support" active-class="active-link">Support</router-link></li>
-        <li><a href="#" @click.prevent="logout">Logout</a></li>
+        <li>
+          <Link href="/admin/dashboard" class="sidebar-link" :class="{ 'active-link': $page.url.startsWith('/admin/dashboard') }">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+          </Link>
+        </li>
+        <li>
+          <Link href="/admin/orders" class="sidebar-link" :class="{ 'active-link': $page.url.startsWith('/admin/orders') }">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Orders</span>
+          </Link>
+        </li>
+        <li>
+          <Link href="/admin/users" class="sidebar-link" :class="{ 'active-link': $page.url.startsWith('/admin/users') }">
+            <i class="fas fa-users"></i>
+            <span>Users</span>
+          </Link>
+        </li>
+        <li>
+          <Link href="/admin/prescriptions" class="sidebar-link" :class="{ 'active-link': $page.url.startsWith('/admin/prescriptions') }">
+            <i class="fas fa-file-prescription"></i>
+            <span>Prescriptions</span>
+          </Link>
+        </li>
+        <li>
+          <Link href="/admin/products" class="sidebar-link" :class="{ 'active-link': $page.url.startsWith('/admin/products') }">
+            <i class="fas fa-box"></i>
+            <span>Products</span>
+          </Link>
+        </li>
+        <li>
+          <Link href="/admin/blogs" class="sidebar-link" :class="{ 'active-link': $page.url.startsWith('/admin/blogs') }">
+            <i class="fas fa-blog"></i>
+            <span>Blogs</span>
+          </Link>
+        </li>
+        <li>
+          <Link href="/admin/support" class="sidebar-link" :class="{ 'active-link': $page.url.startsWith('/admin/support') }">
+            <i class="fas fa-headset"></i>
+            <span>Support</span>
+          </Link>
+        </li>
+        <li class="separator"></li>
+        <li>
+          <a href="#" @click.prevent="logout" class="sidebar-link">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </li>
       </ul>
     </nav>
   </div>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-const router = useRouter();
+import { router, Link } from '@inertiajs/vue3';
 function logout() {
   localStorage.removeItem('admin_logged_in');
-  router.push('/admin/login');
+  router.visit('/admin/login');
 }
 </script>
 
 <style scoped>
 .admin-sidebar {
-  width: 220px;
-  background: linear-gradient(120deg, #2563eb 0%, #1e293b 100%);
+  width: 250px;
+  background: #1e1e1e;
   color: #fff;
   min-height: 100vh;
-  padding-top: 40px;
-  box-shadow: 2px 0 12px rgba(30,41,59,0.09);
+  box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
 }
+
+.sidebar-header {
+  text-align: center;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 20px;
+}
+
+.sidebar-logo {
+  height: 150px;
+  width: auto;
+  margin: 0 auto 10px;
+  display: block;
+}
+
+.sidebar-title {
+  font-size: 18px; /* Increased from 16px */
+  font-weight: 600; /* Increased from 500 */
+  color: #e5e5e5;
+  margin: 0;
+  padding: 0;
+  letter-spacing: 0.5px;
+}
+
+nav {
+  flex: 1;
+}
+
 nav ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
+
 nav ul li {
-  margin: 24px 0;
-  padding-left: 30px;
+  margin: 5px 0;
 }
-nav ul li a {
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
   color: #fff;
   text-decoration: none;
-  font-size: 18px;
-  opacity: 0.85;
-  transition: color 0.2s, opacity 0.2s;
+  font-size: 16px;
+  opacity: 0.8;
+  transition: all 0.2s ease;
 }
-nav ul li a:hover, nav ul li a.active-link {
-  font-weight: bold;
-  text-decoration: underline;
-  color: #fff;
+
+.sidebar-link i {
+  margin-right: 12px;
+  width: 20px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.sidebar-link:hover, .sidebar-link.active-link {
+  background: rgba(255,255,255,0.1);
   opacity: 1;
+  text-decoration: none;
+  border-left: 3px solid #4ade80; /* Green accent as shown in image */
+}
+
+.separator {
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin: 15px 20px;
 }
 </style>

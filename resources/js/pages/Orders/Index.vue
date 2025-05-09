@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <div class="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <!-- Header -->
@@ -27,6 +28,7 @@
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script setup>
@@ -35,6 +37,8 @@
 // Each order object should have: id, status, placed_at, total, items (array), payment_icon, payment_text, payment_status, progress
 import OrderCard from './OrderCard.vue'
 import EmptyState from './EmptyState.vue'
+import NavBar from '@/components/NavBar.vue'
+import Footer from '@/components/Footer.vue'
 import { Link, usePage } from '@inertiajs/vue3'
 import { computed } from 'vue'
 import { route } from 'ziggy-js'

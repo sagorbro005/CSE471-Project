@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <div class="py-12 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <!-- Header Section -->
@@ -83,10 +84,13 @@
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script setup lang="ts">
+import NavBar from '@/components/NavBar.vue';
 import { Link } from '@inertiajs/vue3';
+import Footer from '@/components/Footer.vue';
 
 // Props received from the controller
 defineProps<{

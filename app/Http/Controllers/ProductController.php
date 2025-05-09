@@ -83,10 +83,21 @@ class ProductController extends Controller
                 ->take(4)
                 ->get();
 
+            $userCanReview = false;
+            if (auth()->check()) {
+                $userId = auth()->id();
+                $userCanReview = \App\Models\Order::where('user_id', $userId)
+                    ->where('status', 'Delivered')
+                    ->whereHas('items', function ($q) use ($product) {
+                        $q->where('product_id', $product->id);
+                    })
+                    ->exists();
+            }
             return Inertia::render('Products/Show', [
                 'product' => $product,
                 'relatedProducts' => $relatedProducts,
-                'userCanReview' => auth()->check()
+                'userCanReview' => $userCanReview,
+                'isLoggedIn' => auth()->check(),
             ]);
         } catch (\Exception $e) {
             \Log::error('Error in ProductController@show: ' . $e->getMessage());

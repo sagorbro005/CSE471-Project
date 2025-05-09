@@ -20,12 +20,30 @@ class AdminUserController extends Controller
             });
         }
         $users = $query->orderBy('id', 'desc')->paginate(10);
+        
+        // Format users data for Inertia or API
+        $formattedUsers = [
+            'data' => $users->items(),
+            'current_page' => $users->currentPage(),
+            'last_page' => $users->lastPage(),
+            'per_page' => $users->perPage(),
+            'total' => $users->total(),
+            'from' => $users->firstItem(),
+            'to' => $users->lastItem(),
+        ];
+        
         // For API response
         if ($request->wantsJson()) {
-            return response()->json($users);
+            return response()->json($formattedUsers);
         }
-        // For Inertia (if you want to use Inertia page)
-        return Inertia::render('admin/AdminUsersIndex', [ 'users' => $users ]);
+        
+        // For Inertia page
+        return Inertia::render('admin/AdminUsersIndex', [
+            'users' => $formattedUsers,
+            'filters' => [
+                'search' => $request->input('search'),
+            ],
+        ]);
     }
 
     // Update a user

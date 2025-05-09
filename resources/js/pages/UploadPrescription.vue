@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
     <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -123,116 +124,115 @@
             </div>
         </div>
     </div>
+    <Footer />
 </template>
 
-<script>
-import { router } from '@inertiajs/vue3'
+<script setup>
+import NavBar from '@/components/NavBar.vue';
+import Footer from '@/components/Footer.vue';
+import { ref } from 'vue';
+import { router } from '@inertiajs/vue3';
 
-export default {
-    data() {
-        return {
-            files: [],
-            previews: [],
-            notes: '',
-            successMessage: '',
-            errorMessage: '',
-            fileError: '',
-            isSubmitting: false
-        }
-    },
-    methods: {
-        // Handle file selection from input
-        handleFiles(event) {
-            const newFiles = event.target?.files || event
-            this.addFiles(newFiles)
-        },
+// Reactive state
+const files = ref([]);
+const previews = ref([]);
+const notes = ref('');
+const successMessage = ref('');
+const errorMessage = ref('');
+const fileError = ref('');
+const isSubmitting = ref(false);
+const fileInput = ref(null);
 
-        // Handle drag and drop
-        handleDrop(event) {
-            this.addFiles(event.dataTransfer.files)
-        },
+// Handle file selection from input
+const handleFiles = (event) => {
+    const newFiles = event.target?.files || event;
+    addFiles(newFiles);
+};
 
-        // Add files to the list
-        addFiles(newFiles) {
-            if (this.files.length + newFiles.length > 5) {
-                this.fileError = 'You can only upload up to 5 files'
-                return
-            }
+// Handle drag and drop
+const handleDrop = (event) => {
+    addFiles(event.dataTransfer.files);
+};
 
-            Array.from(newFiles).forEach(file => {
-                // Check file type
-                if (!file.type.startsWith('image/')) {
-                    this.fileError = 'Only image files are allowed'
-                    return
-                }
-
-                // Check file size (2MB = 2 * 1024 * 1024 bytes)
-                if (file.size > 2 * 1024 * 1024) {
-                    this.fileError = 'Files must be less than 2MB'
-                    return
-                }
-
-                // Create preview URL
-                const reader = new FileReader()
-                reader.onload = (e) => {
-                    this.previews.push(e.target.result)
-                }
-                reader.readAsDataURL(file)
-
-                // Add file to files array
-                this.files.push(file)
-            })
-
-            // Clear any previous error if successful
-            if (this.files.length <= 5) {
-                this.fileError = ''
-            }
-        },
-
-        // Remove file from the list
-        removeFile(index) {
-            this.files.splice(index, 1)
-            this.previews.splice(index, 1)
-            this.fileError = ''
-        },
-
-        // Handle form submission
-        async handleSubmit() {
-            if (this.files.length === 0) {
-                this.errorMessage = 'Please upload at least one prescription'
-                return
-            }
-
-            this.isSubmitting = true
-            this.successMessage = ''
-            this.errorMessage = ''
-
-            try {
-                const formData = new FormData()
-                this.files.forEach(file => {
-                    formData.append('prescriptions[]', file)
-                })
-                formData.append('notes', this.notes)
-
-                router.post(route('prescription.upload'), formData, {
-                    onSuccess: () => {
-                        this.successMessage = 'Prescription uploaded successfully! One Medimart representative will call you shortly for confirming this order.'
-                        this.files = []
-                        this.previews = []
-                        this.notes = ''
-                    },
-                    onError: (errors) => {
-                        this.errorMessage = Object.values(errors)[0] || 'Failed to upload prescription. Please try again.'
-                    },
-                    onFinish: () => {
-                        this.isSubmitting = false
-                    }
-                })
-            } catch (error) {
-                this.errorMessage = 'Failed to upload prescription. Please try again.'
-                this.isSubmitting = false
-            }
-        }
+// Add files to the list
+const addFiles = (newFiles) => {
+    if (files.value.length + newFiles.length > 5) {
+        fileError.value = 'You can only upload up to 5 files';
+        return;
     }
-}
+
+    Array.from(newFiles).forEach(file => {
+        // Check file type
+        if (!file.type.startsWith('image/')) {
+            fileError.value = 'Only image files are allowed';
+            return;
+        }
+
+        // Check file size (2MB = 2 * 1024 * 1024 bytes)
+        if (file.size > 2 * 1024 * 1024) {
+            fileError.value = 'Files must be less than 2MB';
+            return;
+        }
+
+        // Create preview URL
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previews.value.push(e.target.result);
+        };
+        reader.readAsDataURL(file);
+
+        // Add file to files array
+        files.value.push(file);
+    });
+
+    // Clear any previous error if successful
+    if (files.value.length <= 5) {
+        fileError.value = '';
+    }
+};
+
+// Remove file from the list
+const removeFile = (index) => {
+    files.value.splice(index, 1);
+    previews.value.splice(index, 1);
+    fileError.value = '';
+};
+
+// Handle form submission
+const handleSubmit = async () => {
+    if (files.value.length === 0) {
+        errorMessage.value = 'Please upload at least one prescription';
+        return;
+    }
+
+    isSubmitting.value = true;
+    successMessage.value = '';
+    errorMessage.value = '';
+
+    try {
+        const formData = new FormData();
+        files.value.forEach(file => {
+            formData.append('prescriptions[]', file);
+        });
+        formData.append('notes', notes.value);
+
+        router.post(route('prescription.upload'), formData, {
+            onSuccess: () => {
+                successMessage.value = 'Prescription uploaded successfully! One Medimart representative will call you shortly for confirming this order.';
+                files.value = [];
+                previews.value = [];
+                notes.value = '';
+            },
+            onError: (errors) => {
+                errorMessage.value = Object.values(errors)[0] || 'Failed to upload prescription. Please try again.';
+            },
+            onFinish: () => {
+                isSubmitting.value = false;
+            }
+        });
+    } catch (error) {
+        errorMessage.value = 'Failed to upload prescription. Please try again.';
+        isSubmitting.value = false;
+    }
+};
 </script>

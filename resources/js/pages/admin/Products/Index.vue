@@ -1,5 +1,6 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
+  <AdminLayout>
+    <div class="container mx-auto px-4 py-8">
     <!-- Header and Add Product Button -->
     <div class="flex justify-between items-center mb-8">
       <h2 class="text-2xl font-bold text-gray-800">Manage Products</h2>
@@ -69,12 +70,14 @@
     <div class="mt-4">
       <Pagination :links="products.links" />
     </div>
-  </div>
+    </div>
+  </AdminLayout>
 </template>
 
 <script setup>
 import { router, Link, usePage } from '@inertiajs/vue3';
 import Pagination from '@/components/Pagination.vue';
+import AdminLayout from '@/layouts/AdminLayout.vue';
 
 // Props from controller
 const props = defineProps({
@@ -98,4 +101,9 @@ function deleteProduct(id) {
 </script>
 
 <style scoped>
+.container {
+  background: #f4f7fb;
+  padding: 20px;
+  border-radius: 8px;
+}
 </style>

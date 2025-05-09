@@ -77,7 +77,8 @@ class CartController extends Controller
             ]);
         }
 
-        // Redirect back with success message
+        // Always redirect back with success message
+        // The cartCount will be automatically included in the shared data by HandleInertiaRequests middleware
         return back()->with('success', 'Product added to cart successfully!');
     }
 

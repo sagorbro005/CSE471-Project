@@ -58,10 +58,7 @@
           <button @click="$emit('view-details', order.id)" class="inline-flex items-center px-5 py-2 rounded-lg text-white bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-300">
             <i class="fas fa-eye mr-2"></i> View Details
           </button>
-          <button v-if="order.status === 'Delivered'" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-            <i class="fas fa-star mr-2"></i>
-            Rate Order
-          </button>
+
         </div>
       </div>
       <!-- Progress Bar for Processing/Shipped Orders -->

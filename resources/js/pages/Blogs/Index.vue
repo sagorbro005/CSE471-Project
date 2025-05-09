@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <!-- Search Box -->
@@ -74,9 +75,12 @@
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
+import NavBar from '@/components/NavBar.vue';
+import Footer from '@/components/Footer.vue';
 import { Link } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import Pagination from '../../Components/Pagination.vue'
@@ -84,7 +88,9 @@ import Pagination from '../../Components/Pagination.vue'
 export default {
   components: {
     Link,
-    Pagination
+    Pagination,
+    NavBar,
+    Footer
   },
 
   props: {

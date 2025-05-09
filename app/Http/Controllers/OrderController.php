@@ -80,14 +80,15 @@ class OrderController extends Controller
                 'payment_status' => $order->payment_status,
                 'placed_at' => $order->created_at->timezone('Asia/Dhaka')->format('Y-m-d H:i:s'),
                 'items' => $order->items->map(function($item) {
-                    return [
-                        'id' => $item->id,
-                        'name' => $item->name,
-                        'quantity' => $item->quantity,
-                        'price' => $item->price,
-                        'image' => $item->image,
-                    ];
-                }),
+    return [
+        'id' => $item->id,
+        'name' => $item->name,
+        'quantity' => $item->quantity,
+        'price' => $item->price,
+        'image' => $item->image,
+        'slug' => optional($item->product)->slug, // Include product slug for navigation
+    ];
+}),
             ];
         });
         
@@ -104,7 +105,7 @@ class OrderController extends Controller
     {
         $order = Order::where('id', $id)
             ->where('user_id', Auth::id())
-            ->with(['items'])
+            ->with(['items', 'user'])
             ->firstOrFail();
         // Format order for frontend
         $orderData = [
@@ -116,25 +117,47 @@ class OrderController extends Controller
             'delivery_charge' => $order->delivery_charge,
             'discount' => $order->discount ?? 0,
             'coupon_code' => $order->coupon_code ?? null,
-            'delivery_address' => $order->delivery_address,
-            'contact_phone' => $order->contact_phone,
             'payment_icon' => $this->getPaymentIcon($order),
             'payment_text' => $this->getPaymentText($order),
             'payment_status' => $order->payment_status,
             'status_class' => $this->getOrderStatusClass($order->status),
+            'delivery_address' => $order->delivery_address ?? ($order->user->address ?? null),
+            'contact_phone' => $order->contact_phone ?? ($order->user->phone ?? null),
+            'contact_email' => $order->user->email ?? null,
+            'customer_name' => $order->user->name ?? null,
             'items' => $order->items->map(function($item) {
-                return [
-                    'id' => $item->id,
-                    'name' => $item->name,
-                    'quantity' => $item->quantity,
-                    'price' => $item->price,
-                    'image' => $item->image,
-                ];
-            }),
+    return [
+        'id' => $item->id,
+        'name' => $item->name,
+        'quantity' => $item->quantity,
+        'price' => $item->price,
+        'image' => $item->image,
+        'slug' => optional($item->product)->slug, // Include product slug for navigation
+    ];
+}),
         ];
         return Inertia::render('Orders/Show', [
             'order' => $orderData
         ]);
+    }
+
+    // Download invoice as PDF or HTML
+    public function downloadInvoice($id)
+    {
+        $order = Order::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->with(['items', 'user'])
+            ->firstOrFail();
+        // For PDF generation, use dompdf/barryvdh
+        // If not installed, fallback to HTML
+        if (class_exists('Barryvdh\\DomPDF\\Facade\\Pdf')) {
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('invoice', compact('order'));
+            return $pdf->download('invoice_'.$order->id.'.pdf');
+        } else {
+            // fallback: return HTML view for download
+            return response()->view('invoice', compact('order'))
+                ->header('Content-Disposition', 'attachment; filename=invoice_'.$order->id.'.html');
+        }
     }
 
     // Place a new order (Checkout process)

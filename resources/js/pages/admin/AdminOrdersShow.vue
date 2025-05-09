@@ -58,9 +58,10 @@
         <tbody class="bg-white divide-y divide-gray-200">
           <tr v-for="item in order.items" :key="item.id">
             <td class="px-6 py-4">
-              <Link :href="`/products/${item.product_id}`" class="text-blue-700 hover:underline">
-                {{ item.name }}
-              </Link>
+              <Link v-if="item.slug" :href="route('products.show', { product: item.slug })" class="text-blue-700 hover:underline">
+  {{ item.name }}
+</Link>
+<span v-else class="text-gray-400">{{ item.name }} (no slug)</span>
             </td>
             <td class="px-6 py-4">৳{{ safeToFixed(item.price) }}</td>
             <td class="px-6 py-4">{{ item.quantity }}</td>

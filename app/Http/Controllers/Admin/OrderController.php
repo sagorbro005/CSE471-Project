@@ -65,7 +65,7 @@ class OrderController extends Controller
     // Show details for a single product order
     public function show($id)
     {
-        $order = Order::with(['user', 'items'])->whereDoesntHave('prescriptions')->findOrFail($id);
+        $order = Order::with(['user', 'items.product'])->whereDoesntHave('prescriptions')->findOrFail($id);
         $createdAt = $order->created_at->copy()->timezone('Asia/Dhaka');
         $data = [
             'id' => $order->id,
@@ -79,14 +79,15 @@ class OrderController extends Controller
                 'age' => $order->user->date_of_birth ? \Carbon\Carbon::parse($order->user->date_of_birth)->age : null,
             ],
             'items' => $order->items->map(function($item) {
-                return [
-                    'id' => $item->id,
-                    'name' => $item->name,
-                    'quantity' => $item->quantity,
-                    'price' => $item->price,
-                    'image' => $item->image,
-                ];
-            }),
+    return [
+        'id' => $item->id,
+        'name' => $item->name,
+        'quantity' => $item->quantity,
+        'price' => $item->price,
+        'image' => $item->image,
+        'slug' => optional($item->product)->slug,
+    ];
+}),
             'date' => $createdAt->format('Y-m-d'),
             'time' => $createdAt->format('H:i:s'),
             'status' => $order->status,

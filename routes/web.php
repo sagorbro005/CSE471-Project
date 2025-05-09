@@ -52,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
     // Orders routes
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{id}/invoice', [OrderController::class, 'downloadInvoice'])->name('orders.invoice');
     // Checkout process (order placement)
     Route::post('/checkout/process', [OrderController::class, 'process'])->name('checkout.process');
 });
@@ -73,8 +74,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/prescription/view', [PrescriptionController::class, 'view'])->name('prescription.view');
 });
 
-// -------------------- ADMIN ROUTES --------------------
-Route::prefix('admin')->middleware(['auth'])->group(function () {
+// -------------------- ADMIN API ROUTES --------------------
+Route::prefix('admin')->group(function () {
+
+    // Admin Dashboard API for Vue SPA
+    Route::get('/dashboard-stats', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard.stats');
     // Admin login (handled by Vue, so just a placeholder route)
     Route::get('/login', function () {
         return Inertia::render('admin/AdminLogin');
@@ -113,12 +117,15 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::patch('/prescriptions/{id}/status', [\App\Http\Controllers\Admin\PrescriptionController::class, 'updateStatus'])->name('admin.prescriptions.status');
 
     // Admin Users Management
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/users', [\App\Http\Controllers\AdminUserController::class, 'index']);
-        Route::put('/users/{user}', [\App\Http\Controllers\AdminUserController::class, 'update']);
-    });
+    Route::get('/users', [\App\Http\Controllers\AdminUserController::class, 'index'])->name('admin.users');
+    Route::put('/users/{user}', [\App\Http\Controllers\AdminUserController::class, 'update'])->name('admin.users.update');
 });
 
 // Include other route files
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
+
+// Admin Panel SPA Catch-all (MUST BE LAST)
+Route::get('/admin/{any}', function () {
+    return view('admin');
+})->where('any', '.*');

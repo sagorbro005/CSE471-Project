@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <div class="support-bg min-h-screen flex flex-col items-center justify-center py-8 px-2">
     <!-- Header Section -->
     <div class="w-full max-w-3xl text-center mb-8">
@@ -65,10 +66,13 @@
       </form>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script setup>
 // Import Vue and Inertia helpers
+import NavBar from '@/components/NavBar.vue'
+import Footer from '@/components/Footer.vue'
 import { ref, computed, watch } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
 

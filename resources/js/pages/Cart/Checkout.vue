@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <div class="min-h-screen bg-gray-50 flex flex-col items-center py-10">
     <div class="w-full max-w-7xl flex flex-col md:flex-row gap-10">
       <!-- Payment Section (wider) -->
@@ -148,11 +149,14 @@
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { ref, computed, watch, onMounted } from 'vue';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import NavBar from '@/components/NavBar.vue';
+import Footer from '@/components/Footer.vue';
 
 const props = defineProps({
   cartItems: Array,

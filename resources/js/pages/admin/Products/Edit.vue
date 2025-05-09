@@ -1,5 +1,6 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
+  <AdminLayout>
+    <div class="container mx-auto px-4 py-8">
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
       <h2 class="text-2xl font-bold text-gray-800">Edit Product: {{ form.name }}</h2>
@@ -97,13 +98,15 @@
         <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition">Update Product</button>
       </div>
     </form>
-  </div>
+    </div>
+  </AdminLayout>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { router, Link } from '@inertiajs/vue3';
 import ErrorMsg from '@/components/ErrorMsg.vue';
+import AdminLayout from '@/layouts/AdminLayout.vue';
 
 // Props from controller
 const props = defineProps({

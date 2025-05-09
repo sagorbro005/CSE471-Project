@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -47,14 +48,19 @@
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
 import { Link } from '@inertiajs/vue3'
+import NavBar from '@/components/NavBar.vue'
+import Footer from '@/components/Footer.vue'
 
 export default {
   components: {
-    Link
+    Link,
+    NavBar,
+    Footer
   },
 
   props: {

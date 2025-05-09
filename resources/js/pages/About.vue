@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <div>
     <!-- Hero Section with Gradient -->
     <div class="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500">
@@ -192,10 +193,18 @@
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
+import NavBar from '@/components/NavBar.vue'
+import Footer from '@/components/Footer.vue'
+
 export default {
+  components: {
+    NavBar,
+    Footer
+  },
   name: 'About',
   data() {
     return {

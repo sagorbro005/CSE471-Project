@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <!-- Success Message -->
   <div v-if="showSuccess" class="max-w-xl mx-auto mb-4">
     <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md flex items-center justify-between shadow transition-all duration-300">
@@ -173,11 +174,14 @@
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
+import NavBar from '@/components/NavBar.vue';
+import Footer from '@/components/Footer.vue';
 
 // Flash success message logic
 const page = usePage();

@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <div class="container mx-auto px-4 py-8">
     <div class="bg-white rounded-lg shadow-sm">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
@@ -103,8 +104,9 @@
           </form>
         </div>
         <div v-else class="bg-gray-50 rounded-lg p-4 mb-8">
-          <p class="text-gray-600">Please <Link :href="route('login')" class="text-blue-500 hover:text-blue-600">login</Link> to write a review.</p>
-        </div>
+  <p v-if="isLoggedIn">Please buy the product first to write a review.</p>
+  <p v-else>Please <Link :href="route('login')" class="text-blue-500 hover:text-blue-600">login</Link> to write a review.</p>
+</div>
 
         <!-- Reviews List -->
         <div class="space-y-6">
@@ -142,17 +144,21 @@
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
+import NavBar from '@/components/NavBar.vue';
+import Footer from '@/components/Footer.vue';
 
 // Props from controller
 const props = defineProps({
   product: Object,
   relatedProducts: Array,
-  userCanReview: Boolean
+  userCanReview: Boolean,
+  isLoggedIn: Boolean
 });
 
 // Local state

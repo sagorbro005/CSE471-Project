@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { Link } from '@inertiajs/vue3';
+import Footer from '@/components/Footer.vue';
 
 defineProps<{
     title?: string;
@@ -27,5 +28,6 @@ defineProps<{
                 <slot />
             </div>
         </div>
+        <Footer />
     </div>
 </template>

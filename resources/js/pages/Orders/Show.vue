@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <div class="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <!-- Back Button -->
@@ -49,6 +50,15 @@
                 <div class="text-sm text-gray-500">Quantity: {{ item.quantity }}</div>
               </div>
               <div class="text-lg font-medium text-gray-900">৳{{ formatPrice(item.price * item.quantity) }}</div>
+              <button
+                v-if="order.status === 'Delivered' && item.slug"
+                @click="goToProductReview({ product: item.slug })"
+                class="ml-4 inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-xs font-medium text-white bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              >
+                <i class="fas fa-star mr-1"></i>
+                Review Product
+              </button>
+              <span v-else-if="order.status === 'Delivered' && !item.slug" class="ml-4 text-xs text-red-500">No product review available (missing slug)</span>
             </div>
           </div>
         </div>
@@ -84,10 +94,20 @@
               </div>
               <div class="bg-pink-50 p-4 rounded-xl">
                 <h3 class="text-sm font-medium text-pink-600 mb-2">
-                  <i class="fas fa-phone-alt mr-2"></i>
-                  Contact Information
+                  <i class="fas fa-user mr-2"></i>
+                  Customer Name
                 </h3>
-                <p class="text-sm text-gray-900">{{ order.contact_phone }}</p>
+                <p class="text-sm text-gray-900">{{ order.customer_name || '-' }}</p>
+                <h3 class="text-sm font-medium text-pink-600 mb-2 mt-3">
+                  <i class="fas fa-envelope mr-2"></i>
+                  Email
+                </h3>
+                <p class="text-sm text-gray-900">{{ order.contact_email || '-' }}</p>
+                <h3 class="text-sm font-medium text-pink-600 mb-2 mt-3">
+                  <i class="fas fa-phone-alt mr-2"></i>
+                  Phone
+                </h3>
+                <p class="text-sm text-gray-900">{{ order.contact_phone || '-' }}</p>
               </div>
             </div>
           </div>
@@ -95,14 +115,11 @@
         <!-- Actions -->
         <div class="p-6 md:p-8 border-t border-gray-100 bg-gradient-to-br from-gray-50 to-blue-50 rounded-b-xl">
           <div class="flex flex-col sm:flex-row sm:justify-end space-y-4 sm:space-y-0 sm:space-x-4">
-            <button class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button @click="downloadInvoice" class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
               <i class="fas fa-download mr-2"></i>
               Download Invoice
             </button>
-            <button v-if="order.status === 'Delivered'" class="inline-flex items-center px-6 py-3 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-              <i class="fas fa-star mr-2"></i>
-              Rate Products
-            </button>
+
             <Link :href="route('support.index')" class="inline-flex items-center px-6 py-3 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
               <i class="fas fa-question-circle mr-2"></i>
               Need Help?
@@ -112,8 +129,12 @@
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 <script setup>
+import { Inertia } from '@inertiajs/inertia';
+import NavBar from '@/components/NavBar.vue'
+import Footer from '@/components/Footer.vue'
 import { Link } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 import { computed } from 'vue';
@@ -122,6 +143,15 @@ import { computed } from 'vue';
 const props = defineProps({
   order: Object
 });
+
+function downloadInvoice() {
+  // Download as file (open in new tab to trigger browser download)
+  window.open(route('orders.invoice', props.order.id), '_blank');
+}
+
+function goToProductReview(productParam) {
+  Inertia.visit(route('products.show', productParam));
+}
 const paymentStatusDisplay = computed(() => {
   const paymentMethod = (props.order.payment_method || '').toLowerCase();
   const status = props.order.status;
