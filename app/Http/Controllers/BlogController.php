@@ -39,14 +39,40 @@ class BlogController extends Controller
             abort(404);
         }
         
+        // Format the blog data to ensure image path is correctly handled
+        $blogData = [
+            'id' => $blog->id,
+            'title' => $blog->title,
+            'slug' => $blog->slug,
+            'content' => $blog->content,
+            'category' => $blog->category,
+            'status' => $blog->status,
+            'created_at' => $blog->created_at,
+            'updated_at' => $blog->updated_at,
+            'image' => $blog->image ? asset('storage/' . $blog->image) : null
+        ];
+        
         $relatedBlogs = Blog::where('category', $blog->category)
             ->where('id', '!=', $blog->id)
             ->where('status', true)
             ->limit(3)
-            ->get();
+            ->get()
+            ->map(function($relatedBlog) {
+                return [
+                    'id' => $relatedBlog->id,
+                    'title' => $relatedBlog->title,
+                    'slug' => $relatedBlog->slug,
+                    'content' => $relatedBlog->content,
+                    'category' => $relatedBlog->category,
+                    'status' => $relatedBlog->status,
+                    'created_at' => $relatedBlog->created_at,
+                    'updated_at' => $relatedBlog->updated_at,
+                    'image' => $relatedBlog->image ? asset('storage/' . $relatedBlog->image) : null
+                ];
+            });
             
         return Inertia::render('Blogs/Show', [
-            'blog' => $blog,
+            'blog' => $blogData,
             'relatedBlogs' => $relatedBlogs
         ]);
     }
@@ -58,7 +84,8 @@ class BlogController extends Controller
         $categories = (new Blog)->getCategories();
         return Inertia::render('admin/AdminBlogs', [
             'blogs' => $blogs,
-            'categories' => $categories
+            'categories' => $categories,
+            'flash' => session()->has('success') ? ['success' => session('success')] : []
         ]);
     }
 

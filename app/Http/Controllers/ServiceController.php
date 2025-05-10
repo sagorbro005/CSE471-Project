@@ -140,7 +140,17 @@ class ServiceController extends Controller
                 'fee' => 380,
                 'profileLink' => 'https://doctime.com.bd/doctors/nazmin-nahar-1687301',
                 'designation' => 'Online Consultant'
+            ],
+            [
+                'id' => 6,
+                'name' => 'Dr. Rajib Dutta',
+                'department' => 'Respiratory Medicine',
+                'time' => '7:00 PM - 10:00 PM',
+                'fee' => 500,
+                'profileLink' => 'https://doctime.com.bd/doctors/dr-rajib-dutta-141971',
+                'designation' => 'Online Consultant'
             ]
+
         ];
 
         return Inertia::render('Services/Telemedicine', [

@@ -1,5 +1,19 @@
 <template>
   <NavBar />
+  <!-- Success Message -->
+  <div v-if="showSuccess" class="max-w-xl mx-auto mt-4 mb-4">
+    <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md flex items-center justify-between shadow transition-all duration-300">
+      <div class="flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        {{ successMessage }}
+      </div>
+      <button @click="showSuccess = false" class="text-green-600 hover:text-green-800">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
   <div class="container mx-auto px-4 py-8">
     <div class="bg-white rounded-lg shadow-sm">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
@@ -148,8 +162,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { ref, computed, watch } from 'vue';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/Footer.vue';
 
@@ -202,6 +216,21 @@ const formatDate = (dateString) => {
   }
 };
 
+// Show success messages from flash
+const successMessage = ref('');
+const showSuccess = ref(false);
+
+// Watch for flash messages
+watch(() => usePage().props.flash?.success, (message) => {
+  if (message) {
+    successMessage.value = message;
+    showSuccess.value = true;
+    setTimeout(() => {
+      showSuccess.value = false;
+    }, 5000);
+  }
+}, { immediate: true });
+
 const addToCart = () => {
   // Use product.id for backend route model binding (not slug)
   router.post(route('cart.add', props.product.id), {
@@ -209,10 +238,14 @@ const addToCart = () => {
   }, {
     preserveScroll: true,
     onSuccess: () => {
-      alert(`Added ${quantity.value} ${props.product.name}(s) to cart successfully!`);
+      // Show success message directly (don't rely on flash message)
+      successMessage.value = `Added ${quantity.value} ${props.product.name}(s) to cart successfully!`;
+      showSuccess.value = true;
+      setTimeout(() => {
+        showSuccess.value = false;
+      }, 5000);
     },
     onError: (errors) => {
-      alert('Failed to add product to cart. Please try again.');
       console.error(errors);
     }
   });

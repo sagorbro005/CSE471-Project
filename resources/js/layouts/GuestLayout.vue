@@ -17,7 +17,7 @@
 <script setup>
 // This is a simple layout component that provides the guest layout structure
 // Used by all authentication pages (login, register, forgot password, reset password)
-import Footer from '@/components/Footer.vue';
+// import Footer from '@/components/Footer.vue';
 
 // Set favicon
 const link = document.createElement('link')

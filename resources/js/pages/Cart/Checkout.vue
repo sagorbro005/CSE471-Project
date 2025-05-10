@@ -22,6 +22,23 @@
             </select>
           </div>
 
+          <!-- Address Fields -->
+          <div class="mb-6">
+            <label for="address" class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+            <input type="text" id="address" v-model="address" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="House/Road/Area" required />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div>
+              <label for="city" class="block text-sm font-medium text-gray-700 mb-2">City</label>
+              <input type="text" id="city" v-model="city" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="City" required />
+            </div>
+            <div>
+              <label for="zipCode" class="block text-sm font-medium text-gray-700 mb-2">Zip Code</label>
+              <input type="text" id="zipCode" v-model="zipCode" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Zip Code" required />
+            </div>
+          </div>
+
           <!-- Payment Method Tabs -->
           <div class="mb-6">
             <div class="flex space-x-4 mb-6">
@@ -163,20 +180,23 @@ const props = defineProps({
   subtotal: Number
 });
 
-const activeTab = ref('card');
 const district = ref('');
+const address = ref('');
+const city = ref('');
+const zipCode = ref('');
+const activeTab = ref('card');
+const isSubmitting = ref(false);
+const errorMessage = ref('');
+const successMessage = ref('');
 const deliveryCharge = ref(0);
 const couponCode = ref('');
 const couponSuccess = ref(false);
 const couponError = ref('');
 const couponApplied = ref(false);
 const discount = ref(0);
-const isSubmitting = ref(false);
 
 const total = computed(() => (props.subtotal || 0) + deliveryCharge.value);
 const finalTotal = computed(() => total.value - discount.value);
-const errorMessage = ref('');
-const successMessage = ref('');
 
 // Card form state
 const cardForm = ref({
@@ -235,13 +255,16 @@ function onMobilePhoneInput(e) {
 function submitCard(e) {
   e.preventDefault();
   errorMessage.value = '';
-  if (!district.value || !cardForm.value.card_type || !cardForm.value.card_number || !cardForm.value.expiry || !cardForm.value.cvv) {
-    errorMessage.value = 'Please fill in all card payment fields.';
+  if (!district.value || !address.value || !city.value || !zipCode.value || !cardForm.value.card_type || !cardForm.value.card_number || !cardForm.value.expiry || !cardForm.value.cvv) {
+    errorMessage.value = 'Please fill in all required fields.';
     return;
   }
   const payload = {
     payment_type: 'card',
     district: district.value,
+    address: address.value,
+    city: city.value,
+    zip_code: zipCode.value,
     card_type: cardForm.value.card_type,
     card_number: cardForm.value.card_number.replace(/\s/g, ''),
     expiry: cardForm.value.expiry,
@@ -275,13 +298,16 @@ function submitCard(e) {
 function submitMobile(e) {
   e.preventDefault();
   errorMessage.value = '';
-  if (!district.value || !mobileForm.value.mobile_payment || !mobileForm.value.phone) {
-    errorMessage.value = 'Please fill in all mobile payment fields.';
+  if (!district.value || !address.value || !city.value || !zipCode.value || !mobileForm.value.mobile_payment || !mobileForm.value.phone) {
+    errorMessage.value = 'Please fill in all required fields.';
     return;
   }
   const payload = {
     payment_type: 'mobile',
     district: district.value,
+    address: address.value,
+    city: city.value,
+    zip_code: zipCode.value,
     mobile_payment: mobileForm.value.mobile_payment,
     phone: mobileForm.value.phone,
     cart: props.cartItems,
@@ -313,13 +339,16 @@ function submitMobile(e) {
 function submitCOD(e) {
   e.preventDefault();
   errorMessage.value = '';
-  if (!district.value) {
-    errorMessage.value = 'Please select your district.';
+  if (!district.value || !address.value || !city.value || !zipCode.value) {
+    errorMessage.value = 'Please fill in all required address fields.';
     return;
   }
   const payload = {
     payment_type: 'cod',
     district: district.value,
+    address: address.value,
+    city: city.value,
+    zip_code: zipCode.value,
     cart: props.cartItems,
     subtotal: props.subtotal,
     delivery_charge: deliveryCharge.value,

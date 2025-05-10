@@ -11,6 +11,12 @@ class Support extends Model
 
     // Allow mass assignment for these fields
     protected $fillable = [
-        'name', 'email', 'phone', 'subject', 'message'
+        'name', 'email', 'phone', 'subject', 'message', 'status'
+    ];
+    
+    // Define which attributes should be treated as dates
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 }

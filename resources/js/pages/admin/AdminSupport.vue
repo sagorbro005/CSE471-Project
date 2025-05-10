@@ -2,7 +2,8 @@
   <div class="admin-support">
     <AdminSidebar />
     <div class="support-content">
-      <h2>Customer Support Issues</h2>
+      <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
+      <h2 class="page-title">Customer Support Issues</h2>
       <div class="mb-8 flex items-center w-full max-w-5xl mx-auto">
         <input
           v-model="search"
@@ -21,6 +22,7 @@
             <th>Contact</th>
             <th>Subject</th>
             <th>Message</th>
+            <th>Date & Time</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -31,14 +33,15 @@
             <td>{{ issue.email }}<br><small>{{ issue.phone }}</small></td>
             <td>{{ issue.subject }}</td>
             <td>{{ issue.message }}</td>
+            <td>{{ formatDate(issue.created_at) }}</td>
             <td>
               <span :class="{'solved': issue.status === 'Solved', 'not-solved': issue.status !== 'Solved'}">
                 {{ issue.status ?? 'Not Solved' }}
               </span>
             </td>
             <td>
-              <a href="#" v-if="issue.status !== 'Solved'" @click.prevent="markSolved(issue.id)">Mark as Solved</a>
-              <span v-else>—</span>
+              <button class="status-btn" v-if="issue.status !== 'Solved'" @click="updateStatus(issue.id, 'Solved')">Mark as Solved</button>
+              <button class="status-btn revert" v-else @click="updateStatus(issue.id, 'Not Solved')">Mark as Not Solved</button>
             </td>
           </tr>
         </tbody>
@@ -71,13 +74,46 @@ watch(
   }
 );
 
-function markSolved(id) {
-  const issue = issues.value.find(i => i.id === id);
-  if (issue) {
-    issue.status = 'Solved';
-    // Optionally: send an API request to update status in DB
-    // router.put(`/admin/support/${id}/solve`)
-  }
+const successMessage = ref('');
+
+function formatDate(dateString) {
+  if (!dateString) return 'N/A';
+  const date = new Date(dateString);
+  // Format for Bangladesh Standard Time (UTC+6)
+  const options = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'Asia/Dhaka'
+  };
+  return date.toLocaleString('en-US', options);
+}
+
+// Watch for flash messages from the server
+watch(
+  () => page.props.flash?.success,
+  (message) => {
+    if (message) {
+      successMessage.value = message;
+      setTimeout(() => {
+        successMessage.value = '';
+      }, 3000);
+    }
+  },
+  { immediate: true }
+);
+
+function updateStatus(id, newStatus) {
+  // Send API request to update status in DB
+  router.post(`/admin/support/${id}/status`, {
+    status: newStatus
+  }, {
+    preserveScroll: true,
+    preserveState: false
+  });
 }
 </script>
 
@@ -90,6 +126,24 @@ function markSolved(id) {
   padding: 40px;
   background: #f9f9f9;
 }
+.page-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #2d3748;
+}
+.success-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #10b981;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
+}
 table {
   width: 100%;
   border-collapse: collapse;
@@ -97,8 +151,39 @@ table {
 }
 th, td {
   border: 1px solid #eee;
-  padding: 10px;
+  padding: 12px 15px;
   text-align: left;
+}
+th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+}
+.status-btn {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+.status-btn:hover {
+  background-color: #2563eb;
+}
+.status-btn.revert {
+  background-color: #6b7280;
+}
+.status-btn.revert:hover {
+  background-color: #4b5563;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-20px); }
 }
 .solved {
   background: #e6ffe6;

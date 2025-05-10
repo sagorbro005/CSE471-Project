@@ -1,5 +1,19 @@
 <template>
   <NavBar />
+  <!-- Success Message -->
+  <div v-if="showSuccess" class="max-w-xl mx-auto mt-4 mb-4">
+    <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-md flex items-center justify-between shadow transition-all duration-300">
+      <div class="flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        {{ successMessage }}
+      </div>
+      <button @click="showSuccess = false" class="text-green-600 hover:text-green-800">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
   <div class="container mx-auto px-4 py-8">
     <!-- Search and Category Navigation -->
     <div class="mb-8 space-y-6">
@@ -160,6 +174,21 @@ const selectCategory = (categorySlug) => {
   submitSearch();
 };
 
+// Success message handling
+const successMessage = ref('');
+const showSuccess = ref(false);
+
+// Watch for flash messages from server
+watch(() => usePage().props.flash?.success, (message) => {
+  if (message) {
+    successMessage.value = message;
+    showSuccess.value = true;
+    setTimeout(() => {
+      showSuccess.value = false;
+    }, 5000);
+  }
+}, { immediate: true });
+
 const addToCart = (product) => {
   // Send request to backend to add to cart
   router.post(route('cart.add', product.id), {
@@ -167,11 +196,14 @@ const addToCart = (product) => {
   }, {
     preserveScroll: true,
     onSuccess: () => {
-      // Show success message (optional - you can remove this if you don't want alerts)
-      alert(`Added ${product.name} to cart successfully!`);
+      // Now using the success message banner instead of alert
+      successMessage.value = `Added ${product.name} to cart successfully!`;
+      showSuccess.value = true;
+      setTimeout(() => {
+        showSuccess.value = false;
+      }, 5000);
     },
     onError: (errors) => {
-      alert('Failed to add product to cart. Please try again.');
       console.error(errors);
     }
   });

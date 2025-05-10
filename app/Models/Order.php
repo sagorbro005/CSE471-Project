@@ -10,7 +10,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id', 'total', 'status', 'payment_method', 'payment_status', 'delivery_address', 'contact_phone', 'subtotal', 'delivery_charge', 'coupon_code', 'discount',
-        'card_type', 'card_number', 'expiry', 'cvv', 'mobile_payment',
+        'card_type', 'card_number', 'expiry', 'cvv', 'mobile_payment', 'address', 'city', 'zip_code',
     ];
 
     public function user()

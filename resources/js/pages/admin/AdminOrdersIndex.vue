@@ -56,7 +56,7 @@
             <td class="px-6 py-4">
               <div class="flex flex-wrap gap-2">
                 <div v-for="item in order.items" :key="item.id" class="block w-24 h-24 relative">
-                  <img :src="item.image" alt="Product" class="w-full h-full object-cover rounded" />
+                  <img :src="item.image ? `/storage/${item.image}` : '/images/placeholder.png'" alt="Product" class="w-full h-full object-cover rounded" />
                   <div class="absolute bottom-1 right-1 bg-white bg-opacity-80 px-2 py-1 rounded text-xs text-gray-800">
                     x{{ item.quantity }}
                   </div>

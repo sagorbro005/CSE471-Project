@@ -29,44 +29,6 @@ class OrderController extends Controller
         // Log orders for debugging
         \Log::info('Retrieved orders count: ' . $orders->count(), ['user_id' => Auth::id()]);
             
-        // If no orders found, create a sample order for display purposes
-        if ($orders->isEmpty() && config('app.env') === 'local') {
-            // This is just for development to show how orders will look
-            $sampleOrder = [
-                'id' => 1,
-                'status' => 'Processing',
-                'formatted_date' => now()->format('d M Y, h:i A'),
-                'total' => 2500.00,
-                'subtotal' => 2000.00,
-                'delivery_charge' => 500.00,
-                'items_count' => 3,
-                'payment_icon' => 'fas fa-credit-card',
-                'payment_text' => 'Card',
-                'payment_status' => 'Paid',
-                'progress' => 40,
-                'products' => [
-                    [
-                        'id' => 1,
-                        'name' => 'Product 1',
-                        'quantity' => 2,
-                        'price' => 1000.00,
-                        'image' => 'product1.jpg',
-                    ],
-                    [
-                        'id' => 2,
-                        'name' => 'Product 2',
-                        'quantity' => 1,
-                        'price' => 500.00,
-                        'image' => 'product2.jpg',
-                    ],
-                ],
-                'placed_at' => now()->format('F j, Y h:i A'),
-            ];
-            
-            return Inertia::render('Orders/Index', [
-                'orders' => [$sampleOrder]
-            ]);
-        }
         
         // Format orders for frontend (include status, subtotal, delivery_charge, total, payment_method, payment_status)
         $orders = $orders->map(function($order) {
@@ -111,7 +73,7 @@ class OrderController extends Controller
         $orderData = [
             'id' => $order->id,
             'status' => $order->status,
-            'placed_at' => $order->created_at->format('F j, Y h:i A'),
+            'placed_at' => $order->created_at->timezone('Asia/Dhaka')->format('F j, Y h:i A'),
             'total' => $order->total,
             'subtotal' => $order->subtotal,
             'delivery_charge' => $order->delivery_charge,
@@ -122,6 +84,9 @@ class OrderController extends Controller
             'payment_status' => $order->payment_status,
             'status_class' => $this->getOrderStatusClass($order->status),
             'delivery_address' => $order->delivery_address ?? ($order->user->address ?? null),
+            'address' => $order->address ?? null,
+            'city' => $order->city ?? null,
+            'zip_code' => $order->zip_code ?? null,
             'contact_phone' => $order->contact_phone ?? ($order->user->phone ?? null),
             'contact_email' => $order->user->email ?? null,
             'customer_name' => $order->user->name ?? null,
@@ -164,9 +129,12 @@ class OrderController extends Controller
     public function process(Request $request)
     {
         $validated = $request->validate([
-            'payment_type' => 'required|in:card,mobile,cod',
+            'payment_type' => 'required|string',
             'district' => 'required|string',
-            'cart' => 'required|array|min:1',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'zip_code' => 'required|string',
+            'cart' => 'required|array',
             'subtotal' => 'required|numeric',
             'delivery_charge' => 'required|numeric',
             'total' => 'required|numeric',
@@ -196,6 +164,9 @@ class OrderController extends Controller
                 'delivery_charge' => $validated['delivery_charge'],
                 'total' => $validated['total'],
                 'delivery_address' => $validated['district'],
+                'address' => $validated['address'],
+                'city' => $validated['city'],
+                'zip_code' => $validated['zip_code'],
                 'contact_phone' => $validated['phone'] ?? null,
                 // Store payment/card/mobile details as needed
                 'card_type' => $validated['card_type'] ?? null,

@@ -51,7 +51,52 @@ class SupportController extends Controller
         // Save the support issue to the database
         Support::create($validated);
 
-        // Redirect back with a success message
-        return redirect()->back()->with('success', 'Your message has been sent successfully! We are working on your issues and will get back to you soon.');
+        // Return to the Support page with a flash message
+        return Inertia::render('Support', [
+            'flash' => [
+                'success' => 'Your message has been sent successfully! We are working on your issues and will get back to you soon.'
+            ]
+        ]);
+    }
+    
+    // Update the status of a support issue
+    public function updateStatus(Request $request, $id)
+    {
+        // Validate the status
+        $validated = $request->validate([
+            'status' => 'required|string|in:Solved,Not Solved',
+        ]);
+        
+        // Find the support issue
+        $issue = Support::findOrFail($id);
+        
+        // Update the status
+        $issue->update([
+            'status' => $validated['status']
+        ]);
+        
+        // Get all support issues again to refresh the data
+        $query = \App\Models\Support::query();
+        if ($request->search) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'like', '%'.$request->search.'%')
+                  ->orWhere('email', 'like', '%'.$request->search.'%')
+                  ->orWhere('phone', 'like', '%'.$request->search.'%')
+                  ->orWhere('subject', 'like', '%'.$request->search.'%')
+                  ->orWhere('message', 'like', '%'.$request->search.'%');
+            });
+        }
+        $issues = $query->orderBy('created_at', 'desc')->paginate(12)->withQueryString();
+        
+        // Return to the admin support page with a flash message
+        return Inertia::render('admin/AdminSupport', [
+            'issues' => $issues,
+            'filters' => [
+                'search' => $request->search,
+            ],
+            'flash' => [
+                'success' => 'Support issue status updated successfully'
+            ]
+        ]);
     }
 }

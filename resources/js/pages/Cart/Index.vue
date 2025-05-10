@@ -192,13 +192,13 @@ watch(() => page.props.flash?.success, (newVal) => {
   successMessage.value = newVal;
   showSuccess.value = !!newVal;
   if (showSuccess.value) {
-    setTimeout(() => showSuccess.value = false, 2000);
+    setTimeout(() => showSuccess.value = false, 5000);
   }
 });
 
 onMounted(() => {
   if (showSuccess.value) {
-    setTimeout(() => showSuccess.value = false, 2000);
+    setTimeout(() => showSuccess.value = false, 5000);
   }
 });
 
@@ -249,7 +249,11 @@ function removeItem(cartId) {
     router.delete(route('cart.remove', cartId), {
       preserveScroll: true,
       onSuccess: () => {
-        // Show success message
+        successMessage.value = 'Item removed from cart successfully!';
+        showSuccess.value = true;
+        setTimeout(() => {
+          showSuccess.value = false;
+        }, 5000);
       }
     });
   }
@@ -261,7 +265,11 @@ function emptyCart() {
     router.post(route('cart.clear'), {}, {
       preserveScroll: true,
       onSuccess: () => {
-        // Show success message
+        successMessage.value = 'Cart emptied successfully!';
+        showSuccess.value = true;
+        setTimeout(() => {
+          showSuccess.value = false;
+        }, 5000);
       }
     });
   }
@@ -273,7 +281,12 @@ function updateCart() {
   const changedItems = items.value.filter((item, idx) => item.quantity !== props.cartItems[idx].quantity);
 
   if (changedItems.length === 0) {
-    // No changes, show a message or do nothing
+    // No changes, show a message
+    successMessage.value = 'No changes to update';
+    showSuccess.value = true;
+    setTimeout(() => {
+      showSuccess.value = false;
+    }, 5000);
     return;
   }
 
@@ -291,8 +304,15 @@ function updateCart() {
     });
   });
 
-  // After all updates, reload the cart page to get fresh data and flash message
+  // After all updates, show success message
   promise.then(() => {
+    successMessage.value = 'Cart updated successfully!';
+    showSuccess.value = true;
+    setTimeout(() => {
+      showSuccess.value = false;
+    }, 5000);
+    
+    // Reload to get fresh data
     router.visit(route('cart.index'), {
       preserveScroll: true,
     });

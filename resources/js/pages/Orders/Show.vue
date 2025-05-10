@@ -90,7 +90,11 @@
                   <i class="fas fa-map-marker-alt mr-2"></i>
                   Delivery Address
                 </h3>
-                <p class="text-sm text-gray-900">{{ order.delivery_address }}</p>
+                <div class="text-sm text-gray-900">
+                  <p v-if="order.address">{{ order.address }}</p>
+                  <p v-if="order.city">{{ order.city }}{{ order.zip_code ? ', ' + order.zip_code : '' }}</p>
+                  <p>{{ order.delivery_address || '-' }}</p>
+                </div>
               </div>
               <div class="bg-pink-50 p-4 rounded-xl">
                 <h3 class="text-sm font-medium text-pink-600 mb-2">
@@ -170,12 +174,11 @@ function formatPrice(price) {
 }
 // Format date/time as Bangladesh Standard Time
 function formatBangladeshDate(dateString) {
+  // The backend now sends the date in Bangladesh Standard Time (UTC+6)
+  // We just need to format it properly
   const date = new Date(dateString);
-  // Convert to Bangladesh time (UTC+6)
-  const utc = date.getTime() + (date.getTimezoneOffset() * 60000);
-  const bdTime = new Date(utc + (6 * 60 * 60 * 1000));
   // Format: 06 May 2025, 02:57 AM
-  return bdTime.toLocaleString('en-GB', {
+  return date.toLocaleString('en-GB', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',

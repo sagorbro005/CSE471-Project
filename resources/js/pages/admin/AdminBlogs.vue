@@ -142,6 +142,7 @@ function submitBlog() {
   }
   router.post('/admin/blogs', data, {
     forceFormData: true,
+    preserveState: false, // Don't preserve state, reload fresh data
     onSuccess: () => {
       closeModal();
     }
@@ -159,6 +160,7 @@ function submitEditBlog() {
   }
   router.post(`/admin/blogs/${editingBlog.value.id}`, data, {
     forceFormData: true,
+    preserveState: false,
     onSuccess: () => {
       closeModal();
     }
@@ -168,6 +170,7 @@ function submitEditBlog() {
 function deleteBlog(blog) {
   if (confirm('Are you sure you want to delete this blog?')) {
     router.delete(`/admin/blogs/${blog.id}`, {
+      preserveState: false, // Don't preserve state, reload fresh data
       onSuccess: () => {
         // No-op, will refresh
       }

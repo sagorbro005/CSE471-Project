@@ -4,11 +4,12 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <!-- Blog Header -->
-        <div class="relative">
+        <div class="relative mb-4 overflow-hidden rounded shadow-lg">
+          <!-- Use the exact same image path format as the Index page -->
           <img :src="blog.image ? `/storage/${blog.image}` : '/images/no-image.png'"
                :alt="blog.title" 
                class="w-full h-96 object-cover">
-          <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+          <div class="absolute inset-0 bg-black bg-opacity-30 flex items-end"></div>
           <div class="absolute bottom-0 left-0 p-8 text-white">
             <span class="bg-blue-500 text-white px-4 py-1 rounded-full text-sm">
               {{ blog.category }}
@@ -32,7 +33,7 @@
                :key="relatedBlog.id" 
                class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-lg transition">
             <Link :href="route('blogs.show', relatedBlog.id)">
-              <img :src="relatedBlog.image" 
+              <img :src="relatedBlog.image ? `/storage/${relatedBlog.image}` : '/images/no-image.png'" 
                    :alt="relatedBlog.title" 
                    class="w-full h-48 object-cover">
               <div class="p-6">

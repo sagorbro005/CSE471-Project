@@ -110,6 +110,7 @@ Route::prefix('admin')->group(function () {
 
     // Admin support/issues management (fetches all issues)
     Route::get('/support', [\App\Http\Controllers\SupportController::class, 'index'])->name('admin.support');
+    Route::post('/support/{id}/status', [\App\Http\Controllers\SupportController::class, 'updateStatus'])->name('admin.support.status');
 
     // Admin Prescription Management
     Route::get('/prescriptions', [\App\Http\Controllers\Admin\PrescriptionController::class, 'index'])->name('admin.prescriptions');

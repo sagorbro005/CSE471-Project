@@ -1,5 +1,6 @@
 <template>
-  <div class="container mx-auto px-4 py-6">
+  <AdminLayout>
+    <div class="container mx-auto">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-2xl font-bold">Order Details</h2>
       <span class="text-gray-600">Welcome, Admin</span>
@@ -67,18 +68,20 @@
             <td class="px-6 py-4">{{ item.quantity }}</td>
             <td class="px-6 py-4">৳{{ safeToFixed(item.price * item.quantity) }}</td>
             <td class="px-6 py-4">
-              <img :src="item.image" alt="Product" class="w-16 h-16 object-cover rounded" />
+              <img :src="item.image ? `/storage/${item.image}` : '/images/placeholder.png'" alt="Product" class="w-16 h-16 object-cover rounded" />
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-  </div>
+    </div>
+  </AdminLayout>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
 import { router, Link } from '@inertiajs/vue3';
+import AdminLayout from '@/layouts/AdminLayout.vue';
 const props = defineProps({ order: Object });
 const orderStatus = ref(props.order.status);
 const updating = ref(false);

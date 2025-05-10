@@ -42,7 +42,7 @@
           </thead>
           <tbody>
             <tr v-for="order in stats.recentOrders" :key="order.id">
-              <td>#{ { order.id } }</td>
+              <td>#{{ order.id }}</td>
               <td>
                 <div>{{ order.user.name }}</div>
                 <div class="email">{{ order.user.email }}</div>
@@ -199,7 +199,7 @@ onMounted(async () => {
   color: #fff;
   text-transform: capitalize;
 }
-.status-badge.completed {
+.status-badge.completed, .status-badge.delivered {
   background: #22c55e;
 }
 .status-badge.cancelled {

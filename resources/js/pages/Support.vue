@@ -62,7 +62,7 @@
             <span v-else>Send Message</span>
           </button>
         </div>
-        <div v-if="successMessage" class="mt-4 text-green-600 font-medium text-center">{{ successMessage }}</div>
+        <div v-if="successMessage" class="mt-4 bg-green-50 text-green-600 py-3 px-4 rounded-md font-medium text-center">{{ successMessage }}</div>
       </form>
     </div>
   </div>
@@ -106,15 +106,19 @@ watch(
 
 // Watch for Inertia success flash and show message
 watch(
-  () => page.props.flash && page.props.flash.success,
+  () => page.props.flash?.success,
   (val) => {
     if (val) {
       successMessage.value = val
+      // Reset form on success
+      form.reset()
+      // Clear success message after delay
       setTimeout(() => {
         successMessage.value = ''
-      }, 2500)
+      }, 5000)
     }
-  }
+  },
+  { immediate: true } // Check immediately on component mount
 )
 
 function clearFieldError(field) {
@@ -128,9 +132,7 @@ function submitForm() {
   processing.value = true
   form.post(route('support.store'), {
     preserveScroll: true,
-    onSuccess: () => {
-      form.reset()
-    },
+    preserveState: false, // Don't preserve form state after submission
     onFinish: () => {
       processing.value = false
     }

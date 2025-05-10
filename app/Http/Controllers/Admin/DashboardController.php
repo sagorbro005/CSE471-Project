@@ -13,18 +13,19 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Total Orders (all orders)
-        $totalOrders = Order::count();
+        // Total Orders (excluding prescription orders)
+        $totalOrders = Order::whereDoesntHave('prescriptions')->count();
         // Total Users (all users)
         $totalUsers = User::count();
         // Pending Prescriptions
         $pendingPrescriptions = Prescription::where('status', 'pending')->count();
-        // Total Revenue (sum of total for completed orders only)
-        $totalRevenue = Order::where('status', 'Completed')->sum('total');
-        // Recent Orders (latest 4)
+        // Total Revenue (sum of total for delivered orders only)
+        $totalRevenue = Order::where('status', 'Delivered')->sum('total');
+        // Recent Orders (latest 7, excluding prescription orders)
         $recentOrders = Order::with('user')
+            ->whereDoesntHave('prescriptions') // Exclude prescription orders
             ->orderByDesc('created_at')
-            ->take(4)
+            ->take(7)
             ->get()
             ->map(function($order) {
                 return [
