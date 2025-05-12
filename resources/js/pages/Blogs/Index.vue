@@ -83,7 +83,7 @@ import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/Footer.vue';
 import { Link } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
-import Pagination from '../../Components/Pagination.vue'
+import Pagination from '../../components/Pagination.vue'
 
 export default {
   components: {
