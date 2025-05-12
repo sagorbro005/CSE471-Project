@@ -4,7 +4,7 @@ import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import DeleteUser from '@/components/DeleteUser.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import InputError from '@/components/InputError.vue';
-import NavBar from '@/components/NavBar.vue';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -59,7 +59,6 @@ const submit = () => {
 
 <template>
     <div>
-        <NavBar />
         <AppLayout :breadcrumbs="breadcrumbs">
             <Head title="Profile settings" />
 

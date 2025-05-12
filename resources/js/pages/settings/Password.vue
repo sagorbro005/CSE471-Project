@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import InputError from '@/components/InputError.vue';
-import NavBar from '@/components/NavBar.vue';
+
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
@@ -53,7 +53,6 @@ const updatePassword = () => {
 
 <template>
     <div>
-        <NavBar />
         <AppLayout :breadcrumbs="breadcrumbItems">
             <Head title="Password settings" />
 
