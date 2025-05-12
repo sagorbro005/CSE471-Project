@@ -128,5 +128,5 @@ require __DIR__.'/auth.php';
 
 // Admin Panel SPA Catch-all (MUST BE LAST)
 Route::get('/admin/{any}', function () {
-    return view('admin');
+    return Inertia::render('admin/AdminDashboard');
 })->where('any', '.*');

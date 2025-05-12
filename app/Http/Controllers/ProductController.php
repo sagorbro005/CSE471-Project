@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\ProductReview;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,30 +20,36 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         try {
+            // Cache categories for better performance
             $categories = Category::orderBy('name')->get();
             $selectedCategory = $request->category;
             $search = $request->search;
             
+            // Build query with eager loading for performance
             $query = Product::where('status', 'active')
-                           ->with('category'); // Eager load categories
+                ->with('category');
             
+            // Apply category filter
             if ($selectedCategory) {
-                $query->whereHas('category', function($q) use ($selectedCategory) {
-                    $q->where('slug', $selectedCategory);
-                });
+                $query->whereHas('category', fn($q) => 
+                    $q->where('slug', $selectedCategory)
+                );
             }
 
+            // Apply search filter if provided
             if ($search) {
-                $query->where(function($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%")
-                      ->orWhere('description', 'like', "%{$search}%")
-                      ->orWhere('manufacturer', 'like', "%{$search}%")
-                      ->orWhereHas('category', function($q) use ($search) {
-                          $q->where('name', 'like', "%{$search}%");
-                      });
+                $searchTerm = '%' . $search . '%';
+                $query->where(function($q) use ($searchTerm) {
+                    $q->where('name', 'like', $searchTerm)
+                      ->orWhere('description', 'like', $searchTerm)
+                      ->orWhere('manufacturer', 'like', $searchTerm)
+                      ->orWhereHas('category', fn($q) => 
+                          $q->where('name', 'like', $searchTerm)
+                      );
                 });
             }
             
+            // Get paginated products
             $products = $query->latest()->paginate(12)->withQueryString();
             
             return Inertia::render('Products/Index', [
@@ -69,35 +76,38 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         try {
+            // Check if product is active
             if ($product->status !== 'active') {
                 abort(404);
             }
 
-            // Eager load the category and reviews with their users
+            // Eager load relationships in a single query
             $product->load(['category', 'reviews.user']);
 
+            // Get related products efficiently
             $relatedProducts = Product::where('category_id', $product->category_id)
                 ->where('id', '!=', $product->id)
                 ->where('status', 'active')
-                ->with('category') // Eager load categories for related products
+                ->with('category')
                 ->take(4)
                 ->get();
 
+            // Check if user can leave a review
             $userCanReview = false;
-            if (auth()->check()) {
-                $userId = auth()->id();
-                $userCanReview = \App\Models\Order::where('user_id', $userId)
+            $isLoggedIn = auth()->check();
+            
+            if ($isLoggedIn) {
+                $userCanReview = Order::where('user_id', auth()->id())
                     ->where('status', 'Delivered')
-                    ->whereHas('items', function ($q) use ($product) {
-                        $q->where('product_id', $product->id);
-                    })
+                    ->whereHas('items', fn($q) => $q->where('product_id', $product->id))
                     ->exists();
             }
+            
             return Inertia::render('Products/Show', [
                 'product' => $product,
                 'relatedProducts' => $relatedProducts,
                 'userCanReview' => $userCanReview,
-                'isLoggedIn' => auth()->check(),
+                'isLoggedIn' => $isLoggedIn,
             ]);
         } catch (\Exception $e) {
             \Log::error('Error in ProductController@show: ' . $e->getMessage());
@@ -115,13 +125,15 @@ class ProductController extends Controller
     public function review(Request $request, Product $product)
     {
         try {
-            $request->validate([
+            // Validate review input
+            $validated = $request->validate([
                 'review' => ['required', 'string', 'max:100']
             ]);
 
+            // Create review with validated data
             $product->reviews()->create([
                 'user_id' => auth()->id(),
-                'review' => $request->review
+                'review' => $validated['review']
             ]);
 
             return back()->with('success', 'Review submitted successfully!');

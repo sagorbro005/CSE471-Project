@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/vue3';
 
 import AppearanceTabs from '@/components/AppearanceTabs.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
-import NavBar from '@/components/NavBar.vue';
+
 import { type BreadcrumbItem } from '@/types';
 
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -19,7 +19,6 @@ const breadcrumbItems: BreadcrumbItem[] = [
 
 <template>
     <div>
-        <NavBar />
         <AppLayout :breadcrumbs="breadcrumbItems">
             <Head title="Appearance settings" />
 
