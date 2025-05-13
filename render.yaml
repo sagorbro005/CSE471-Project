@@ -16,7 +16,9 @@ services:
           type: web
           property: url
       - key: DB_CONNECTION
-        value: pgsql # Render provides PostgreSQL by default
+        value: sqlite
+      - key: DB_DATABASE
+        value: /var/www/html/database/database.sqlite
     buildCommand: "" # No need as it's handled in the Dockerfile
     startCommand: "" # No need as it's handled in the Dockerfile
 

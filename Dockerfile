@@ -57,6 +57,11 @@ COPY ./docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN cp .env.example .env || echo "No .env.example found, creating blank .env" && touch .env
 RUN php artisan key:generate
 
+# Create SQLite database directory and file
+RUN mkdir -p /var/www/html/database
+RUN touch /var/www/html/database/database.sqlite
+RUN chown -R www-data:www-data /var/www/html/database
+
 # Expose port 80
 EXPOSE 80
 
