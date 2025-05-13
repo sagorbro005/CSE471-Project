@@ -9,7 +9,7 @@
           v-model="search"
           @keyup.enter="applySearch"
           type="text"
-          class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-none"
+          class="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-base bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-none text-gray-800"
           placeholder="Search by name, email or phone..."
         />
         <button @click="applySearch" class="ml-3 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-base font-medium transition">Search</button>
@@ -29,11 +29,14 @@
         </thead>
         <tbody>
           <tr v-for="issue in issues" :key="issue.id">
-            <td>{{ issue.name }}</td>
-            <td>{{ issue.email }}<br><small>{{ issue.phone }}</small></td>
-            <td>{{ issue.subject }}</td>
-            <td>{{ issue.message }}</td>
-            <td>{{ formatDate(issue.created_at) }}</td>
+            <td class="text-blue-600">{{ issue.name }}</td>
+            <td>
+              <span class="text-blue-600">{{ issue.email }}</span><br>
+              <small class="text-blue-600">{{ issue.phone }}</small>
+            </td>
+            <td class="text-blue-600">{{ issue.subject }}</td>
+            <td class="text-blue-600">{{ issue.message }}</td>
+            <td class="text-blue-600">{{ formatDate(issue.created_at) }}</td>
             <td>
               <span :class="{'solved': issue.status === 'Solved', 'not-solved': issue.status !== 'Solved'}">
                 {{ issue.status ?? 'Not Solved' }}
@@ -43,6 +46,9 @@
               <button class="status-btn" v-if="issue.status !== 'Solved'" @click="updateStatus(issue.id, 'Solved')">Mark as Solved</button>
               <button class="status-btn revert" v-else @click="updateStatus(issue.id, 'Not Solved')">Mark as Not Solved</button>
             </td>
+          </tr>
+          <tr v-if="!issues || issues.length === 0">
+            <td colspan="7" class="text-center text-gray-500 py-4">No support issues found.</td>
           </tr>
         </tbody>
       </table>
@@ -157,6 +163,7 @@ th, td {
 th {
   background-color: #f1f5f9;
   font-weight: 600;
+  color: #2d3748; /* Add this line to set the header text color */
 }
 .status-btn {
   background-color: #3b82f6;
