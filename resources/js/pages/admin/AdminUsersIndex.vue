@@ -41,19 +41,19 @@
         <tbody>
           <tr v-for="user in users" :key="user.id">
             <td>
-              <div class="font-medium">{{ user.name }}</div>
+              <div class="font-medium text-blue-600">{{ user.name }}</div>
             </td>
             <td>
-              <div>{{ user.email }}</div>
-              <div class="text-sm text-gray-600">{{ user.phone }}</div>
+              <div class="text-blue-600">{{ user.email }}</div>
+              <div class="text-sm text-blue-600">{{ user.phone }}</div>
             </td>
             <td>
-              <div>Gender: {{ capitalize(user.gender) }}</div>
-              <div class="text-sm">DOB: {{ formatDate(user.date_of_birth) }}</div>
-              <div class="text-sm">{{ truncate(user.address, 30) }}</div>
+              <div class="text-blue-600">Gender: {{ capitalize(user.gender) }}</div>
+              <div class="text-sm text-blue-600">DOB: {{ formatDate(user.date_of_birth) }}</div>
+              <div class="text-sm text-blue-600">{{ truncate(user.address, 30) }}</div>
             </td>
             <td>
-              <a href="#" class="edit-link" @click.prevent="editUser(user)">Edit</a>
+              <a href="#" class="edit-link text-blue-600" @click.prevent="editUser(user)">Edit</a>
             </td>
           </tr>
           <tr v-if="users.length === 0">

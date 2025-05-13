@@ -42,18 +42,21 @@
           </thead>
           <tbody>
             <tr v-for="order in stats.recentOrders" :key="order.id">
-              <td>#{{ order.id }}</td>
+              <td class="text-blue-600">#{{ order.id }}</td>
               <td>
-                <div>{{ order.user.name }}</div>
-                <div class="email">{{ order.user.email }}</div>
+                <div class="text-blue-600">{{ order.user.name }}</div>
+                <div class="email text-blue-600">{{ order.user.email }}</div>
               </td>
               <td>
                 <span :class="['status-badge', order.status.toLowerCase()]">
                   {{ order.status }}
                 </span>
               </td>
-              <td>৳{{ order.total }}</td>
-              <td>{{ order.date }}</td>
+              <td class="text-blue-600">৳{{ order.total }}</td>
+              <td class="text-blue-600">{{ order.date }}</td>
+            </tr>
+            <tr v-if="stats.recentOrders.length === 0">
+              <td colspan="5" class="text-center text-gray-500 py-4">No recent orders found.</td>
             </tr>
           </tbody>
         </table>

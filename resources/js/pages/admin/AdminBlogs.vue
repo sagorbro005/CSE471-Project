@@ -23,45 +23,48 @@
               <img v-if="blog.image" :src="`/storage/${blog.image}`" alt="Blog Image" class="blog-thumb" />
               <span v-else class="no-img">No Image</span>
             </td>
-            <td>{{ blog.title }}</td>
-            <td>{{ blog.category }}</td>
+            <td class="text-blue-600">{{ blog.title }}</td>
+            <td class="text-blue-600">{{ blog.category }}</td>
             <td><span :class="{'active': blog.status}">{{ blog.status ? 'Active' : 'Inactive' }}</span></td>
-            <td>{{ new Date(blog.created_at).toLocaleString() }}</td>
+            <td class="text-blue-600">{{ new Date(blog.created_at).toLocaleString() }}</td>
             <td>
               <a href="#" class="edit-link" @click.prevent="openEditModal(blog)">Edit</a> |
               <a href="#" class="delete-link" @click.prevent="deleteBlog(blog)">Delete</a>
             </td>
+          </tr>
+          <tr v-if="!blogs || blogs.length === 0">
+            <td colspan="6" class="text-center text-gray-500 py-4">No blogs found.</td>
           </tr>
         </tbody>
       </table>
       <!-- Add/Edit Blog Modal -->
       <div v-if="showModal" class="modal-bg">
         <div class="modal-content">
-          <h3>{{ editMode ? 'Edit Blog' : 'Add New Blog' }}</h3>
+          <h3 class="text-blue-600 mb-4 text-xl font-semibold">{{ editMode ? 'Edit Blog' : 'Add New Blog' }}</h3>
           <form @submit.prevent="editMode ? submitEditBlog() : submitBlog()" enctype="multipart/form-data">
             <div class="form-group">
-              <label>Title</label>
+              <label class="text-blue-600">Title</label>
               <input v-model="form.title" required />
             </div>
             <div class="form-group">
-              <label>Category</label>
+              <label class="text-blue-600">Category</label>
               <select v-model="form.category" required>
                 <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
               </select>
             </div>
             <div class="form-group">
-              <label>Content</label>
+              <label class="text-blue-600">Content</label>
               <textarea v-model="form.content" required></textarea>
             </div>
             <div class="form-group">
-              <label>Status</label>
+              <label class="text-blue-600">Status</label>
               <select v-model="form.status" required>
                 <option :value="true">Active</option>
                 <option :value="false">Inactive</option>
               </select>
             </div>
             <div class="form-group">
-              <label>Image</label>
+              <label class="text-blue-600">Image</label>
               <input type="file" @change="handleImage" accept="image/*" />
               <div v-if="form.imagePreview">
                 <img :src="form.imagePreview" class="preview-thumb" />
@@ -278,6 +281,7 @@ th {
   font-size: 1rem;
   outline: none;
   margin-top: 0.2rem;
+  color: #222e3c; /* Add this line to set the text color to a dark gray/black */
 }
 .form-group textarea {
   min-height: 80px;
