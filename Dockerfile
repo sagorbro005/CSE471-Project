@@ -20,13 +20,14 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     nginx \
-    supervisor
+    supervisor \
+    libpq-dev
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install extensions
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd soap
+RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd soap pdo_pgsql
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 
 # Install composer

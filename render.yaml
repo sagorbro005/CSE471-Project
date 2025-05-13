@@ -15,10 +15,18 @@ services:
           name: medimart
           type: web
           property: url
-      - key: SESSION_DRIVER
-        value: file
-      - key: CACHE_DRIVER
-        value: file
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        value: dpg-d0hmra3uibrs739tcfsg-a
+      - key: DB_PORT
+        value: 5432
+      - key: DB_DATABASE
+        value: project_medimart
+      - key: DB_USERNAME
+        value: project_medimart_user
+      - key: DB_PASSWORD
+        value: STZbIrBLksHHw5OtIsnCgVmilITrWTKC
     buildCommand: "" # No need as it's handled in the Dockerfile
     startCommand: "" # No need as it's handled in the Dockerfile
 

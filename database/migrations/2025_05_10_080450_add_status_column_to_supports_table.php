@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('supports', function (Blueprint $table) {
-            $table->string('status')->default('Not Solved')->after('message');
+            $table->string('status')->default('Not Solved');
         });
     }
 

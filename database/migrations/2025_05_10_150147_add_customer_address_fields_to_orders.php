@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('address')->nullable()->after('delivery_address');
-            $table->string('city')->nullable()->after('address');
-            $table->string('zip_code')->nullable()->after('city');
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('zip_code')->nullable();
         });
     }
 
