@@ -131,8 +131,8 @@
           <div v-for="item in cartItems" :key="item.id" class="flex justify-between pb-4 border-b border-gray-100">
             <div class="flex items-start">
               <div class="flex-shrink-0 w-12 h-12 rounded overflow-hidden mr-3">
-                <img 
-                  :src="item.product.image ? `/storage/${item.product.image}` : '/images/placeholder.png'" 
+                <img
+                  :src="item.product.image ? `/storage/${item.product.image}` : '/images/placeholder.png'"
                   :alt="item.product.name"
                   class="w-full h-full object-cover"
                 >
@@ -236,7 +236,9 @@ function formatCardNumber(val, type) {
 }
 
 function onCardNumberInput(e) {
-  cardForm.value.card_number = formatCardNumber(e.target.value, cardForm.value.card_type);
+  let value = e.target.value.replace(/\D/g, '');
+  value = value.slice(0, 16);
+  cardForm.value.card_number = formatCardNumber(value, cardForm.value.card_type);
 }
 
 function onCVVInput(e) {
@@ -277,14 +279,14 @@ function submitCard(e) {
   isSubmitting.value = true;
   router.post(route('checkout.process'), payload, {
     preserveScroll: true,
-    onSuccess: () => { 
-      successMessage.value = 'Order placed successfully!'; 
+    onSuccess: () => {
+      successMessage.value = 'Order placed successfully!';
       setTimeout(() => {
         router.visit(route('orders.index'));
       }, 1000);
     },
-    onError: (errors) => { 
-      errorMessage.value = 'Failed to place order. Please check your input.'; 
+    onError: (errors) => {
+      errorMessage.value = 'Failed to place order. Please check your input.';
       isSubmitting.value = false;
     },
     onFinish: () => {
@@ -318,14 +320,14 @@ function submitMobile(e) {
   isSubmitting.value = true;
   router.post(route('checkout.process'), payload, {
     preserveScroll: true,
-    onSuccess: () => { 
-      successMessage.value = 'Order placed successfully!'; 
+    onSuccess: () => {
+      successMessage.value = 'Order placed successfully!';
       setTimeout(() => {
         router.visit(route('orders.index'));
       }, 1000);
     },
-    onError: (errors) => { 
-      errorMessage.value = 'Failed to place order. Please check your input.'; 
+    onError: (errors) => {
+      errorMessage.value = 'Failed to place order. Please check your input.';
       isSubmitting.value = false;
     },
     onFinish: () => {
@@ -357,14 +359,14 @@ function submitCOD(e) {
   isSubmitting.value = true;
   router.post(route('checkout.process'), payload, {
     preserveScroll: true,
-    onSuccess: () => { 
-      successMessage.value = 'Order placed successfully!'; 
+    onSuccess: () => {
+      successMessage.value = 'Order placed successfully!';
       setTimeout(() => {
         router.visit(route('orders.index'));
       }, 1000);
     },
-    onError: (errors) => { 
-      errorMessage.value = 'Failed to place order. Please check your input.'; 
+    onError: (errors) => {
+      errorMessage.value = 'Failed to place order. Please check your input.';
       isSubmitting.value = false;
     },
     onFinish: () => {
@@ -399,7 +401,7 @@ function applyCoupon() {
     return;
   }
   if (couponCode.value.trim().toLowerCase() === 'medimart10') {
-    discount.value = Math.round(total.value * 0.10);
+    discount.value = Math.round(props.subtotal * 0.10);
     couponSuccess.value = true;
     couponApplied.value = true;
     couponError.value = '';
@@ -413,7 +415,7 @@ function applyCoupon() {
 // Update discount if subtotal or delivery changes (e.g., user changes district)
 watch([total], () => {
   if (couponApplied.value) {
-    discount.value = Math.round(total.value * 0.10);
+    discount.value = Math.round(props.subtotal * 0.10);
   }
 });
 

@@ -79,7 +79,6 @@ Route::prefix('admin')->group(function () {
 
     // Admin Dashboard API for Vue SPA
     Route::get('/dashboard-stats', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard.stats');
-    // Admin login (handled by Vue, so just a placeholder route)
     Route::get('/login', function () {
         return Inertia::render('admin/AdminLogin');
     })->name('admin.login');
