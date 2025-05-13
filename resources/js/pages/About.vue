@@ -248,7 +248,7 @@ export default {
           role: 'Chief Executive Officer',
           image: '/images/about/team2.jpg',
           gradientClass: 'bg-gradient-to-br from-purple-500 to-pink-500',
-          twitter: 'https://twitter.com/zubayerhassan',
+          twitter: 'https://twitter.com/zubayer_hassan',
           linkedin: 'https://linkedin.com/in/zubayerhassan'
         },
         {
