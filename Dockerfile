@@ -61,6 +61,9 @@ RUN php artisan key:generate
 # Configure the application to work without a database
 RUN echo "\nSESSION_DRIVER=file\nCACHE_DRIVER=file\n" >> .env
 
+# Migrate Database
+RUN php artisan migrate --force
+
 # Expose port 80
 EXPOSE 80
 
