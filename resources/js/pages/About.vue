@@ -48,7 +48,7 @@
           <div class="space-y-10 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-8 md:gap-y-10">
             <!-- Journey Items with Hover Effects -->
             <div v-for="(milestone, index) in milestones" :key="index" class="relative group">
-              <div :class="milestone.iconBg" class="absolute flex items-center justify-center h-16 w-16 rounded-full text-white transform transition-all duration-300 group-hover:scale-110">
+              <div :class="milestone.iconBg" class="absolute flex items-center justify-center h-16 w-16 rounded-full text-white transform transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
                 <i :class="milestone.icon" class="text-2xl"></i>
               </div>
               <div class="ml-20 p-6 bg-white rounded-xl shadow-xl transform transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-2xl">
@@ -72,11 +72,11 @@
         <div class="mt-10">
           <div class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
             <!-- Mission Card -->
-            <div class="group bg-gradient-to-br from-blue-500 to-purple-500 p-1 rounded-2xl transform transition-all duration-300 hover:scale-105">
+            <div class="group bg-gradient-to-br from-blue-500 to-purple-500 p-1 rounded-2xl transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
               <div class="bg-white p-6 rounded-2xl h-full">
                 <div class="flex items-center mb-4">
                   <div class="flex-shrink-0">
-                    <div class="flex items-center justify-center h-14 w-14 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white transform transition-all duration-300 group-hover:scale-110">
+                    <div class="flex items-center justify-center h-14 w-14 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white transform transition-all duration-300 group-hover:scale-110 group-hover:shadow-md">
                       <i class="fas fa-bullseye text-2xl"></i>
                     </div>
                   </div>
@@ -90,19 +90,19 @@
             </div>
 
             <!-- Values Card -->
-            <div class="group bg-gradient-to-br from-purple-500 to-pink-500 p-1 rounded-2xl transform transition-all duration-300 hover:scale-105">
+            <div class="group bg-gradient-to-br from-purple-500 to-pink-500 p-1 rounded-2xl transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
               <div class="bg-white p-6 rounded-2xl h-full">
                 <div class="flex items-center mb-4">
                   <div class="flex-shrink-0">
-                    <div class="flex items-center justify-center h-14 w-14 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white transform transition-all duration-300 group-hover:scale-110">
+                    <div class="flex items-center justify-center h-14 w-14 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white transform transition-all duration-300 group-hover:scale-110 group-hover:shadow-md">
                       <i class="fas fa-heart text-2xl"></i>
                     </div>
                   </div>
                   <h3 class="ml-4 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">Our Values</h3>
                 </div>
                 <ul class="space-y-4">
-                  <li v-for="(value, index) in values" :key="index" class="flex items-center text-lg text-gray-600 transform transition-all duration-300 hover:translate-x-2">
-                    <i class="fas fa-check-circle text-purple-500 mr-3 text-xl"></i>
+                  <li v-for="(value, index) in values" :key="index" class="flex items-center text-lg text-gray-600 transform transition-all duration-300 hover:translate-x-3 hover:text-purple-700">
+                    <i class="fas fa-check-circle text-purple-500 mr-3 text-xl group-hover:text-purple-600 transition-colors duration-300"></i>
                     {{ value }}
                   </li>
                 </ul>
@@ -126,7 +126,7 @@
         </div>
         <div class="mt-12 grid gap-8 md:grid-cols-3 lg:gap-x-12">
           <div v-for="(member, index) in teamMembers" :key="index" class="group">
-            <div class="relative transform transition-all duration-300 group-hover:-translate-y-2">
+            <div class="relative transform transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-2xl">
               <div :class="member.gradientClass" class="p-1 rounded-2xl shadow-xl">
                 <div class="bg-white p-6 rounded-2xl text-center">
                   <div class="relative mb-4">
@@ -136,10 +136,10 @@
                   <p class="text-gray-500">{{ member.role }}</p>
                   <div class="mt-4 flex justify-center space-x-4">
                     <a :href="member.twitter" target="_blank" class="text-blue-400 hover:text-blue-600 transition-colors">
-                      <i class="fab fa-twitter text-xl"></i>
+                      <i class="fab fa-twitter text-xl transform transition-transform duration-300 hover:scale-110"></i>
                     </a>
                     <a :href="member.linkedin" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors">
-                      <i class="fab fa-linkedin text-xl"></i>
+                      <i class="fab fa-linkedin text-xl transform transition-transform duration-300 hover:scale-110"></i>
                     </a>
                   </div>
                 </div>
@@ -159,8 +159,8 @@
             <h2 class="text-3xl font-bold text-white">Need Help? Contact Us</h2>
 
             <!-- Hotline -->
-            <div class="flex items-center space-x-4">
-              <div class="bg-white/20 p-3 rounded-full">
+            <div class="flex items-center space-x-4 group">
+              <div class="bg-white/20 p-3 rounded-full transform transition-transform duration-300 group-hover:scale-110">
                 <i class="fas fa-phone text-white text-xl"></i>
               </div>
               <div>
@@ -170,8 +170,8 @@
             </div>
 
             <!-- Email -->
-            <div class="flex items-center space-x-4">
-              <div class="bg-white/20 p-3 rounded-full">
+            <div class="flex items-center space-x-4 group">
+              <div class="bg-white/20 p-3 rounded-full transform transition-transform duration-300 group-hover:scale-110">
                 <i class="fas fa-envelope text-white text-xl"></i>
               </div>
               <div>
@@ -182,8 +182,8 @@
           </div>
 
           <!-- Right Side: 24/7 Support Card -->
-          <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center transform hover:scale-105 transition-transform duration-300">
-            <div class="bg-white/20 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center transform hover:scale-105 transition-transform duration-300 hover:shadow-xl">
+            <div class="bg-white/20 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 transform transition-transform duration-300 hover:scale-110">
               <i class="fas fa-headset text-white text-3xl"></i>
             </div>
             <h3 class="text-2xl font-bold text-white mb-4">24/7 Customer Support</h3>
