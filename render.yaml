@@ -3,7 +3,7 @@ services:
     name: medimart
     env: docker
     dockerfilePath: ./Dockerfile
-    branch: main # Change this to your main branch name if different
+    branch: deploy # Change this to your main branch name if different
     healthCheckPath: /
     envVars:
       - key: APP_ENV
@@ -15,14 +15,10 @@ services:
           name: medimart
           type: web
           property: url
-      - key: DB_CONNECTION
-        value: sqlite
-      - key: DB_DATABASE
-        value: /var/www/html/database/database.sqlite
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_DRIVER
+        value: file
     buildCommand: "" # No need as it's handled in the Dockerfile
     startCommand: "" # No need as it's handled in the Dockerfile
 
-databases:
-  - name: medimart_db
-    databaseName: medimart
-    ipAllowList: [] # Allow all IPs
