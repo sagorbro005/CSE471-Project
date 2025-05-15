@@ -74,6 +74,27 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/prescription/view', [PrescriptionController::class, 'view'])->name('prescription.view');
 });
 
+// Debug routes for testing
+Route::get('/db-test', function () {
+    try {
+        // Test database connection
+        DB::connection()->getPdo();
+        echo "Connected to database: " . DB::connection()->getDatabaseName();
+        
+        // Show number of products
+        $productCount = DB::table('products')->count();
+        echo "<br>Number of products: " . $productCount;
+        
+        return;
+    } catch (\Exception $e) {
+        die("Database Error: " . $e->getMessage());
+    }
+});
+
+Route::get('/error-log', function () {
+    return nl2br(file_get_contents(storage_path('logs/laravel.log')));
+});
+
 // -------------------- ADMIN API ROUTES --------------------
 Route::prefix('admin')->group(function () {
 

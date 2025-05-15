@@ -64,8 +64,11 @@ RUN php artisan config:clear
 # Configure the application to work without a database
 RUN echo "\nSESSION_DRIVER=file\nCACHE_DRIVER=file\n" >> .env
 
-# Migrate Database
-RUN php artisan migrate --force
+# Cache config for better performance
+RUN php artisan config:cache
+
+# Migrate Database with seeding
+RUN php artisan migrate:fresh --force --seed
 
 # Expose port 80
 EXPOSE 80
