@@ -5,23 +5,21 @@ WORKDIR /var/www/html
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
-    unzip \
     git \
     curl \
-    libzip-dev \
+    libpng-dev \
     libonig-dev \
     libxml2-dev \
-    nginx \
+    zip \
+    unzip \
     supervisor \
-    libpq-dev
+    nginx \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpq-dev \
+    libgd-dev \
+    libmagickwand-dev \
+    imagemagick
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -40,9 +38,18 @@ RUN apt-get install -y nodejs
 # Copy application files
 COPY . /var/www/html/
 
-# Ensure public directory has proper permissions
+# Ensure public directory has proper permissions and copy public images
 RUN chmod -R 755 /var/www/html/public
 RUN chmod +x /var/www/html/docker/static-images.sh
+
+# Create directories for all required images
+RUN mkdir -p /var/www/html/public/images/slider
+RUN mkdir -p /var/www/html/public/images/about
+RUN mkdir -p /var/www/html/public/images/categories
+RUN mkdir -p /var/www/html/public/images/payment
+
+# Set proper permissions for image directories
+RUN chmod -R 755 /var/www/html/public/images
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache

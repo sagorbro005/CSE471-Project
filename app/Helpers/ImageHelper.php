@@ -21,10 +21,20 @@ class ImageHelper
         if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
             return $path;
         }
-
+        
+        // Special handling for static images in /public/images directory
+        if (str_starts_with($path, '/images/')) {
+            return asset($path);
+        }
+        
         // Check if the path starts with /storage
         if (str_starts_with($path, '/storage')) {
             return asset($path);
+        }
+        
+        // Check if it might be a relative path to images directory
+        if (str_starts_with($path, 'images/')) {
+            return asset('/' . $path);
         }
 
         // Otherwise, assume it's a storage path
