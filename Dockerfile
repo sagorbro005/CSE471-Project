@@ -40,6 +40,9 @@ RUN apt-get install -y nodejs
 # Copy application files
 COPY . /var/www/html/
 
+# Explicitly ensure public/images exists and is copied
+RUN mkdir -p /var/www/html/public/images && chown -R www-data:www-data /var/www/html/public/images
+
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 

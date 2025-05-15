@@ -21,7 +21,12 @@ export const imageHelper = {
         return path;
       }
 
-      // If it starts with /storage, just use as is with asset helper
+      // If it starts with /images, treat as static asset
+      if (path.startsWith('/images/')) {
+        return path;
+      }
+
+      // If it starts with /storage, just use as is
       if (path.startsWith('/storage/')) {
         return path;
       }
