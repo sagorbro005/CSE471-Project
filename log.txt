@@ -1,100 +1,50 @@
-2025-05-15T17:01:31.632087418Z #23 8.745 public/build/assets/AdminUsersEdit-RT9h2Y5m.js                                 4.48 kB │ gzip:  1.45 kB
-2025-05-15T17:01:31.632089078Z #23 8.745 public/build/assets/Faq-MgPNgB_c.js                                            4.57 kB │ gzip:  2.08 kB
-2025-05-15T17:01:31.632090768Z #23 8.745 public/build/assets/AdminBlogs-DrwGK5Mi.js                                     4.82 kB │ gzip:  1.79 kB
-2025-05-15T17:01:31.632092468Z #23 8.745 public/build/assets/Hospital-DYDcIg8o.js                                       4.83 kB │ gzip:  1.95 kB
-2025-05-15T17:01:31.632094138Z #23 8.746 public/build/assets/Label.vue_vue_type_script_setup_true_lang-DKCmvRHr.js      4.97 kB │ gzip:  2.30 kB
-2025-05-15T17:01:31.632097108Z #23 8.746 public/build/assets/Support-B4DoE-Lb.js                                        5.09 kB │ gzip:  1.84 kB
-2025-05-15T17:01:31.632098848Z #23 8.746 public/build/assets/Footer.vue_vue_type_script_setup_true_lang-Ba6EUzY_.js     5.19 kB │ gzip:  1.66 kB
-2025-05-15T17:01:31.632100508Z #23 8.746 public/build/assets/Create-DqmDURZ3.js                                         5.50 kB │ gzip:  1.80 kB
-2025-05-15T17:01:31.632102168Z #23 8.746 public/build/assets/AdminOrdersShow-D9nft3-P.js                                5.66 kB │ gzip:  2.14 kB
-2025-05-15T17:01:31.632106918Z #23 8.746 public/build/assets/Index-CVclvCMf.js                                          5.98 kB │ gzip:  2.59 kB
-2025-05-15T17:01:31.632108658Z #23 8.746 public/build/assets/Edit-Cj-c08UB.js                                           6.03 kB │ gzip:  1.98 kB
-2025-05-15T17:01:31.632110309Z #23 8.746 public/build/assets/Welcome.vue_vue_type_script_setup_true_lang-DXGN2k-l.js    6.18 kB │ gzip:  2.45 kB
-2025-05-15T17:01:31.632111958Z #23 8.746 public/build/assets/Layout.vue_vue_type_script_setup_true_lang-DXIrf44O.js     6.28 kB │ gzip:  2.20 kB
-2025-05-15T17:01:31.632113609Z #23 8.746 public/build/assets/UploadPrescription-CjSK8l5F.js                             6.71 kB │ gzip:  2.75 kB
-2025-05-15T17:01:31.632115259Z #23 8.746 public/build/assets/Telemedicine-hxW7nKBK.js                                   6.82 kB │ gzip:  1.96 kB
-2025-05-15T17:01:31.632116909Z #23 8.746 public/build/assets/AdminPrescriptionsIndex-B7pJWTJ-.js                        6.84 kB │ gzip:  2.47 kB
-2025-05-15T17:01:31.632118579Z #23 8.746 public/build/assets/AdminOrdersIndex-BRDsms-5.js                               6.94 kB │ gzip:  2.48 kB
-2025-05-15T17:01:31.632120239Z #23 8.746 public/build/assets/Index-LepM1XxS.js                                          7.40 kB │ gzip:  2.78 kB
-2025-05-15T17:01:31.632121919Z #23 8.746 public/build/assets/Show-CBLAWEA8.js                                           8.47 kB │ gzip:  3.23 kB
-2025-05-15T17:01:31.632123599Z #23 8.746 public/build/assets/About-BojUCBd-.js                                         10.57 kB │ gzip:  3.21 kB
-2025-05-15T17:01:31.632125269Z #23 8.746 public/build/assets/Checkout-C4ovr0BD.js                                      14.17 kB │ gzip:  3.85 kB
-2025-05-15T17:01:31.632126959Z #23 8.746 public/build/assets/app-9Hu4jkH6.js                                           24.01 kB │ gzip:  8.68 kB
-2025-05-15T17:01:31.632137009Z #23 8.746 public/build/assets/createLucideIcon-CxNjC51_.js                              25.07 kB │ gzip:  8.71 kB
-2025-05-15T17:01:31.632138999Z #23 8.746 public/build/assets/main-_H8ub3Z8.js                                          25.33 kB │ gzip: 10.19 kB
-2025-05-15T17:01:31.632140669Z #23 8.746 public/build/assets/Profile-BJ9pCsxM.js                                       34.63 kB │ gzip: 11.04 kB
-2025-05-15T17:01:31.632142429Z #23 8.746 public/build/assets/Show-Cqk_dNx7.js                                          40.56 kB │ gzip: 14.10 kB
-2025-05-15T17:01:31.632144149Z #23 8.746 public/build/assets/index.esm-CNS9opE5.js                                    227.51 kB │ gzip: 80.69 kB
-2025-05-15T17:01:31.632152159Z #23 8.746 ✓ built in 7.50s
-2025-05-15T17:01:31.933764729Z #23 DONE 9.0s
-2025-05-15T17:01:31.93378563Z
-2025-05-15T17:01:31.93379336Z #24 [stage-0 15/22] COPY ./docker/nginx.conf /etc/nginx/sites-available/default
-2025-05-15T17:01:31.93379791Z #24 DONE 0.0s
-2025-05-15T17:01:31.93380178Z
-2025-05-15T17:01:31.93380766Z #25 [stage-0 16/22] COPY ./docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-2025-05-15T17:01:31.93381141Z #25 DONE 0.0s
-2025-05-15T17:01:31.93381479Z
-2025-05-15T17:01:31.933820411Z #26 [stage-0 17/22] RUN cp .env.example .env || echo "No .env.example found, creating blank .env" && touch .env
-2025-05-15T17:01:32.084262773Z #26 DONE 0.1s
-2025-05-15T17:01:32.084283023Z
-2025-05-15T17:01:32.084288694Z #27 [stage-0 18/22] RUN php artisan key:generate
-2025-05-15T17:01:32.234972061Z #27 0.215
-2025-05-15T17:01:32.234991821Z #27 0.215    INFO  Application key set successfully.
-2025-05-15T17:01:32.234996002Z #27 0.215
-2025-05-15T17:01:32.385648709Z #27 DONE 0.3s
-2025-05-15T17:01:32.385671589Z
-2025-05-15T17:01:32.385688019Z #28 [stage-0 19/22] RUN php artisan config:clear
-2025-05-15T17:01:32.535982099Z #28 0.191
-2025-05-15T17:01:32.535996929Z #28 0.191    INFO  Configuration cache cleared successfully.
-2025-05-15T17:01:32.536000309Z #28 0.191
-2025-05-15T17:01:32.658473884Z #28 DONE 0.3s
-2025-05-15T17:01:32.658493044Z
-2025-05-15T17:01:32.658497974Z #29 [stage-0 20/22] RUN echo "\nSESSION_DRIVER=file\nCACHE_DRIVER=file\n" >> .env
-2025-05-15T17:01:32.658502024Z #29 DONE 0.1s
-2025-05-15T17:01:32.808905486Z
-2025-05-15T17:01:32.808925826Z #30 [stage-0 21/22] RUN php artisan config:cache
-2025-05-15T17:01:32.958986382Z #30 0.224
-2025-05-15T17:01:32.959006342Z #30 0.224    INFO  Configuration cached successfully.
-2025-05-15T17:01:32.959010612Z #30 0.224
-2025-05-15T17:01:45.234936115Z #30 DONE 12.6s
-2025-05-15T17:01:45.385926959Z
-2025-05-15T17:01:45.385955129Z #31 [stage-0 22/22] RUN php artisan migrate:fresh --force --seed
-2025-05-15T17:01:47.941505255Z #31 2.531
-2025-05-15T17:01:48.004327569Z #31 2.534 In Connection.php line 822:
-2025-05-15T17:01:48.004352639Z #31 2.534
-2025-05-15T17:01:48.004356969Z #31 2.534   Database file at path [/var/www/html/database/database.sqlite] does not exi
-2025-05-15T17:01:48.004360909Z #31 2.534   st. Ensure this is an absolute path to the database. (Connection: sqlite, S
-2025-05-15T17:01:48.004364439Z #31 2.534   QL: select exists (select 1 from "main".sqlite_master where name = 'migrati
-2025-05-15T17:01:48.00436794Z #31 2.535   ons' and type = 'table') as "exists")
-2025-05-15T17:01:48.00437166Z #31 2.535
-2025-05-15T17:01:48.004375749Z #31 2.535
-2025-05-15T17:01:48.00437933Z #31 2.535 In SQLiteConnector.php line 59:
-2025-05-15T17:01:48.00438287Z #31 2.535
-2025-05-15T17:01:48.00438649Z #31 2.535   Database file at path [/var/www/html/database/database.sqlite] does not exi
-2025-05-15T17:01:48.00439009Z #31 2.535   st. Ensure this is an absolute path to the database.
-2025-05-15T17:01:48.00439404Z #31 2.535
-2025-05-15T17:01:48.00439764Z #31 2.535
-2025-05-15T17:03:59.86776332Z #31 ERROR: process "/bin/sh -c php artisan migrate:fresh --force --seed" did not complete successfully: exit code: 1
-2025-05-15T17:03:59.912012123Z ------
-2025-05-15T17:03:59.912049524Z  > [stage-0 22/22] RUN php artisan migrate:fresh --force --seed:
-2025-05-15T17:03:59.912055884Z 2.534   QL: select exists (select 1 from "main".sqlite_master where name = 'migrati
-2025-05-15T17:03:59.912060184Z 2.535   ons' and type = 'table') as "exists")
-2025-05-15T17:03:59.912064184Z 2.535
-2025-05-15T17:03:59.912068164Z 2.535
-2025-05-15T17:03:59.912073194Z 2.535 In SQLiteConnector.php line 59:
-2025-05-15T17:03:59.912077365Z 2.535
-2025-05-15T17:03:59.912081605Z 2.535   Database file at path [/var/www/html/database/database.sqlite] does not exi
-2025-05-15T17:03:59.912086195Z 2.535   st. Ensure this is an absolute path to the database.
-2025-05-15T17:03:59.912090915Z 2.535
-2025-05-15T17:03:59.912095605Z 2.535
-2025-05-15T17:03:59.912100375Z ------
-2025-05-15T17:03:59.913641016Z Dockerfile:71
-2025-05-15T17:03:59.913669166Z --------------------
-2025-05-15T17:03:59.913673896Z   69 |
-2025-05-15T17:03:59.913678506Z   70 |     # Migrate Database with seeding
-2025-05-15T17:03:59.913682896Z   71 | >>> RUN php artisan migrate:fresh --force --seed
-2025-05-15T17:03:59.913686737Z   72 |
-2025-05-15T17:03:59.913691226Z   73 |     # Expose port 80
-2025-05-15T17:03:59.913695517Z --------------------
-2025-05-15T17:03:59.913700187Z error: failed to solve: process "/bin/sh -c php artisan migrate:fresh --force --seed" did not complete successfully: exit code: 1
-2025-05-15T17:03:59.935856679Z error: exit status 1
+2025-05-15T20:14:59.961714615Z #14 32.95 checking build system type... x86_64-pc-linux-gnu
+2025-05-15T20:14:59.961716365Z #14 32.96 checking host system type... x86_64-pc-linux-gnu
+2025-05-15T20:14:59.961718105Z #14 32.96 checking target system type... x86_64-pc-linux-gnu
+2025-05-15T20:14:59.961723385Z #14 32.99 checking for PHP prefix... /usr/local
+2025-05-15T20:15:00.11225289Z #14 32.99 checking for PHP includes... -I/usr/local/include/php -I/usr/local/include/php/main -I/usr/local/include/php/TSRM -I/usr/local/include/php/Zend -I/usr/local/include/php/ext -I/usr/local/include/php/ext/date/lib
+2025-05-15T20:15:00.11227233Z #14 32.99 checking for PHP extension directory... /usr/local/lib/php/extensions/no-debug-non-zts-20220829
+2025-05-15T20:15:00.11227569Z #14 32.99 checking for PHP installed headers prefix... /usr/local/include/php
+2025-05-15T20:15:00.11227841Z #14 32.99 checking if debug is enabled... no
+2025-05-15T20:15:00.112280571Z #14 33.01 checking if zts is enabled... no
+2025-05-15T20:15:00.11228276Z #14 33.03 checking for gawk... no
+2025-05-15T20:15:00.112284911Z #14 33.03 checking for nawk... nawk
+2025-05-15T20:15:00.112287291Z #14 33.03 checking if nawk is broken... no
+2025-05-15T20:15:00.112289581Z #14 33.03 checking for zip archive read/write support... yes, shared
+2025-05-15T20:15:00.112291801Z #14 33.03 checking for libzip >= 0.11 libzip != 1.3.1 libzip != 1.7.0... no
+2025-05-15T20:15:00.112294261Z #14 33.07 configure: error: Package requirements (libzip >= 0.11 libzip != 1.3.1 libzip != 1.7.0) were not met:
+2025-05-15T20:15:00.112296581Z #14 33.07
+2025-05-15T20:15:00.112298871Z #14 33.07 Package 'libzip', required by 'virtual:world', not found
+2025-05-15T20:15:00.112301001Z #14 33.07 Package 'libzip', required by 'virtual:world', not found
+2025-05-15T20:15:00.112303101Z #14 33.07 Package 'libzip', required by 'virtual:world', not found
+2025-05-15T20:15:00.112305301Z #14 33.07
+2025-05-15T20:15:00.112307451Z #14 33.07 Consider adjusting the PKG_CONFIG_PATH environment variable if you
+2025-05-15T20:15:00.112310381Z #14 33.07 installed software in a non-standard prefix.
+2025-05-15T20:15:00.112312641Z #14 33.07
+2025-05-15T20:15:00.112314781Z #14 33.07 Alternatively, you may set the environment variables LIBZIP_CFLAGS
+2025-05-15T20:15:00.112316921Z #14 33.07 and LIBZIP_LIBS to avoid the need to call pkg-config.
+2025-05-15T20:15:00.112319132Z #14 33.07 See the pkg-config man page for more details.
+2025-05-15T20:15:00.520821904Z #14 ERROR: process "/bin/sh -c docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd soap pdo_pgsql" did not complete successfully: exit code: 1
+2025-05-15T20:15:00.563025091Z ------
+2025-05-15T20:15:00.563040361Z  > [stage-0  5/39] RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd soap pdo_pgsql:
+2025-05-15T20:15:00.563044491Z 33.07 Package 'libzip', required by 'virtual:world', not found
+2025-05-15T20:15:00.563047441Z 33.07 Package 'libzip', required by 'virtual:world', not found
+2025-05-15T20:15:00.563050191Z 33.07 Package 'libzip', required by 'virtual:world', not found
+2025-05-15T20:15:00.563052931Z 33.07
+2025-05-15T20:15:00.563056172Z 33.07 Consider adjusting the PKG_CONFIG_PATH environment variable if you
+2025-05-15T20:15:00.563058992Z 33.07 installed software in a non-standard prefix.
+2025-05-15T20:15:00.563061882Z 33.07
+2025-05-15T20:15:00.563064762Z 33.07 Alternatively, you may set the environment variables LIBZIP_CFLAGS
+2025-05-15T20:15:00.563075632Z 33.07 and LIBZIP_LIBS to avoid the need to call pkg-config.
+2025-05-15T20:15:00.563077692Z 33.07 See the pkg-config man page for more details.
+2025-05-15T20:15:00.563079402Z ------
+2025-05-15T20:15:00.564390037Z Dockerfile:28
+2025-05-15T20:15:00.564414168Z --------------------
+2025-05-15T20:15:00.564417118Z   26 |
+2025-05-15T20:15:00.564420118Z   27 |     # Install extensions
+2025-05-15T20:15:00.564423498Z   28 | >>> RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd soap pdo_pgsql
+2025-05-15T20:15:00.564426718Z   29 |     RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+2025-05-15T20:15:00.564429669Z   30 |
+2025-05-15T20:15:00.564432358Z --------------------
+2025-05-15T20:15:00.564445319Z error: failed to solve: process "/bin/sh -c docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd soap pdo_pgsql" did not complete successfully: exit code: 1
+2025-05-15T20:15:00.581056296Z error: exit status 1
