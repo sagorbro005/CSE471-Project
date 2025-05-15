@@ -43,14 +43,8 @@ COPY . /var/www/html/
 RUN chmod -R 755 /var/www/html/public
 RUN chmod +x /var/www/html/docker/static-images.sh
 
-# Create directories for all required images
-RUN mkdir -p /var/www/html/public/images/slider
-RUN mkdir -p /var/www/html/public/images/about
-RUN mkdir -p /var/www/html/public/images/categories
-RUN mkdir -p /var/www/html/public/images/payment
-
-# Set proper permissions for image directories
-RUN chmod -R 755 /var/www/html/public/images
+# Ensure public directory has proper permissions for images
+RUN chmod -R 755 /var/www/html/public
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache

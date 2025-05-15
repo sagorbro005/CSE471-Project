@@ -62,9 +62,9 @@ import { imageHelper } from '@/mixins/ImageHelper.js';
 const { getImageUrl } = imageHelper.methods;
 
 const slides = [
-  { id: 1, image: '/images/slider/slide1.jpg' },
-  { id: 2, image: '/images/slider/slide2.jpg' },
-  { id: 3, image: '/images/slider/slide3.jpg' },
+  { id: 1, image: '/images/slider/slide1.JPG' },
+  { id: 2, image: '/images/slider/slide2.JPG' },
+  { id: 3, image: '/images/slider/slide3.JPG' },
 ];
 const activeSlide = ref(0);
 let interval: number | undefined;

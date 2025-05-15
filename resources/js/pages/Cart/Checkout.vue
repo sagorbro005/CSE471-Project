@@ -379,14 +379,14 @@ function submitCOD(e) {
 
 // Card and mobile types
 const cardTypes = [
-  { value: 'visa', label: 'Visa', logo: '/images/visa.png' },
-  { value: 'mastercard', label: 'Mastercard', logo: '/images/mastercard.png' },
-  { value: 'amex', label: 'Amex', logo: '/images/amex.png' }
+  { value: 'visa', label: 'Visa', logo: '/images/Visa.png' },
+  { value: 'mastercard', label: 'Mastercard', logo: '/images/Mastercard.png' },
+  { value: 'amex', label: 'Amex', logo: '/images/Amex.png' }
 ];
 const mobileTypes = [
-  { value: 'bkash', label: 'bKash', logo: '/images/bkash.png' },
-  { value: 'nagad', label: 'Nagad', logo: '/images/nagad.png' },
-  { value: 'rocket', label: 'Rocket', logo: '/images/rocket.png' }
+  { value: 'bkash', label: 'bKash', logo: '/images/bKash.png' },
+  { value: 'nagad', label: 'Nagad', logo: '/images/Nagad.png' },
+  { value: 'rocket', label: 'Rocket', logo: '/images/Rocket.png' }
 ];
 
 function formatPrice(price) {

@@ -28,7 +28,7 @@
       </div>
       <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
         <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full transform hover:scale-105 transition-transform duration-500"
-             :src="'/images/about/pharmacy.jpg'"
+             :src="'/images/about/pharmacy.JPG'"
              alt="MediMart Pharmacy">
       </div>
     </div>
@@ -254,7 +254,7 @@ export default {
         {
           name: 'Israt Ipsit',
           role: 'Customer Relations Manager',
-          image: '/images/about/team3.jpg',
+          image: '/images/about/team3.JPG',
           gradientClass: 'bg-gradient-to-br from-pink-500 to-red-500',
           twitter: 'https://twitter.com/isratipsit',
           linkedin: 'https://linkedin.com/in/isratipsit'
