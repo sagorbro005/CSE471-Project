@@ -21,9 +21,9 @@ export const imageHelper = {
         return path;
       }
 
-      // If it starts with /images, treat as static asset
-      if (path.startsWith('/images/')) {
-        return path;
+      // Handle public image paths (like /images/slider/slide1.jpg)
+      if (path.startsWith('/images/') || path.match(/^\/images\//i)) {
+        return path; // These are directly in the public directory
       }
 
       // If it starts with /storage, just use as is

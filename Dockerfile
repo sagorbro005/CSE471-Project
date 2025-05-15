@@ -40,8 +40,9 @@ RUN apt-get install -y nodejs
 # Copy application files
 COPY . /var/www/html/
 
-# Explicitly ensure public/images exists and is copied
-RUN mkdir -p /var/www/html/public/images && chown -R www-data:www-data /var/www/html/public/images
+# Ensure public directory has proper permissions
+RUN chmod -R 755 /var/www/html/public
+RUN chmod +x /var/www/html/docker/static-images.sh
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
@@ -84,6 +85,10 @@ RUN mkdir -p /var/www/html/storage/app/public/products
 RUN mkdir -p /var/www/html/storage/app/public/sliders
 RUN chmod -R 775 /var/www/html/storage
 RUN chown -R www-data:www-data /var/www/html/storage
+
+# Make sure public directory is accessible
+RUN mkdir -p /var/www/html/public/images
+RUN chmod -R 755 /var/www/html/public/images
 
 # Expose port 80
 EXPOSE 80
