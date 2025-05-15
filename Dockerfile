@@ -58,6 +58,9 @@ COPY ./docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN cp .env.example .env || echo "No .env.example found, creating blank .env" && touch .env
 RUN php artisan key:generate
 
+# Clear Laravel config cache
+RUN php artisan config:clear
+
 # Configure the application to work without a database
 RUN echo "\nSESSION_DRIVER=file\nCACHE_DRIVER=file\n" >> .env
 
