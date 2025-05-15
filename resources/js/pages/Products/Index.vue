@@ -61,7 +61,7 @@
     </div>
 
     <!-- Products Grid -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
       <div v-for="product in products.data" :key="product.id"
         class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
         <Link :href="route('products.show', product.slug)" class="block">
