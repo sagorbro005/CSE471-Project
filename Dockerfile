@@ -64,14 +64,20 @@ RUN php artisan config:clear
 # Configure the application to work without a database
 RUN echo "\nSESSION_DRIVER=file\nCACHE_DRIVER=file\n" >> .env
 
-# Cache config for better performance
-RUN php artisan config:cache
+# For Docker build, create SQLite file (will be replaced by PostgreSQL in production)
+RUN mkdir -p /var/www/html/database
+RUN touch /var/www/html/database/database.sqlite
+RUN chmod 777 /var/www/html/database/database.sqlite
 
-# Migrate Database with seeding
-RUN php artisan migrate:fresh --force --seed
+# Set temporary SQLite connection for build
+RUN echo "DB_CONNECTION=sqlite\nDB_DATABASE=/var/www/html/database/database.sqlite" >> .env
+
+# Create startup script
+COPY ./docker/start.sh /start.sh
+RUN chmod +x /start.sh
 
 # Expose port 80
 EXPOSE 80
 
-# Start services with Supervisor
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Use our custom start script
+CMD ["/start.sh"]
