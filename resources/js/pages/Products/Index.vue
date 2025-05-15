@@ -66,7 +66,7 @@
         class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
         <Link :href="route('products.show', product.slug)" class="block">
           <div v-if="product.image" class="w-full h-32 bg-gray-100">
-            <img :src="`/storage/${product.image}`" :alt="product.name" class="w-full h-32 object-cover">
+            <img :src="getImageUrl(product.image)" :alt="product.name" class="w-full h-32 object-cover">
           </div>
           <div v-else class="w-full h-32 bg-gray-100 flex items-center justify-center">
             <i class="fas fa-image text-gray-400 text-4xl"></i>
@@ -129,6 +129,10 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import Pagination from '@/components/Pagination.vue';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/Footer.vue';
+import { imageHelper } from '@/mixins/ImageHelper.js';
+
+// Add image helper methods
+const { getImageUrl } = imageHelper.methods;
 
 // Props from controller
 const props = defineProps({

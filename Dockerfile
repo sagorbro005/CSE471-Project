@@ -76,6 +76,12 @@ RUN echo "DB_CONNECTION=sqlite\nDB_DATABASE=/var/www/html/database/database.sqli
 COPY ./docker/start.sh /start.sh
 RUN chmod +x /start.sh
 
+# Create necessary storage directories and set permissions
+RUN mkdir -p /var/www/html/storage/app/public/products
+RUN mkdir -p /var/www/html/storage/app/public/sliders
+RUN chmod -R 775 /var/www/html/storage
+RUN chown -R www-data:www-data /var/www/html/storage
+
 # Expose port 80
 EXPOSE 80
 

@@ -7,7 +7,7 @@
         <transition-group name="fade" tag="div">
           <div v-for="(slide, idx) in slides" :key="slide.id" v-show="activeSlide === idx"
             class="absolute inset-0 transition-opacity duration-700">
-            <img :src="slide.image" :alt="`Slide ${slide.id}`" class="w-full h-full object-cover object-center">
+            <img :src="getImageUrl(slide.image)" :alt="`Slide ${slide.id}`" class="w-full h-full object-cover object-center">
           </div>
         </transition-group>
       </div>
@@ -56,6 +56,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import { imageHelper } from '@/mixins/ImageHelper.js';
+
+// Add image helper methods
+const { getImageUrl } = imageHelper.methods;
 
 const slides = [
   { id: 1, image: '/images/slider/slide1.jpg' },
