@@ -241,7 +241,7 @@ export default {
           image: '/images/about/team1.jpg',
           gradientClass: 'bg-gradient-to-br from-blue-500 to-purple-500',
           twitter: 'https://twitter.com/sagorbro005',
-          linkedin: 'https://linkedin.com/in/drsarahrahman'
+          linkedin: 'https://linkedin.com/in/sagorbro005'
         },
         {
           name: 'Zubayer Hassan',

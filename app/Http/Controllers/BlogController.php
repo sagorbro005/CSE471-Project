@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Services\CloudinaryService;
+use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
+    protected $cloudinary;
+    
+    public function __construct(CloudinaryService $cloudinary)
+    {
+        $this->cloudinary = $cloudinary;
+    }
     public function index(Request $request)
     {
         $query = Blog::where('status', true);
@@ -49,7 +57,7 @@ class BlogController extends Controller
             'status' => $blog->status,
             'created_at' => $blog->created_at,
             'updated_at' => $blog->updated_at,
-            'image' => $blog->image ? asset('storage/' . $blog->image) : null
+            'image' => $blog->image ? (strpos($blog->image, 'cloudinary.com') !== false ? $blog->image : asset('storage/' . $blog->image)) : null
         ];
         
         $relatedBlogs = Blog::where('category', $blog->category)
@@ -67,7 +75,7 @@ class BlogController extends Controller
                     'status' => $relatedBlog->status,
                     'created_at' => $relatedBlog->created_at,
                     'updated_at' => $relatedBlog->updated_at,
-                    'image' => $relatedBlog->image ? asset('storage/' . $relatedBlog->image) : null
+                    'image' => $relatedBlog->image ? (strpos($relatedBlog->image, 'cloudinary.com') !== false ? $relatedBlog->image : asset('storage/' . $relatedBlog->image)) : null
                 ];
             });
             
@@ -100,7 +108,15 @@ class BlogController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('blogs', 'public');
+            // Upload image to Cloudinary for permanent storage
+            $cloudinaryUrl = $this->cloudinary->uploadImage($request->file('image'), 'blogs');
+            
+            if ($cloudinaryUrl) {
+                $validated['image'] = $cloudinaryUrl;
+            } else {
+                // Fallback to local storage if Cloudinary upload fails
+                $validated['image'] = $request->file('image')->store('blogs', 'public');
+            }
         }
         Blog::create($validated);
         return redirect()->route('admin.blogs')->with('success', 'Blog created successfully!');
@@ -117,7 +133,15 @@ class BlogController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('blogs', 'public');
+            // Upload image to Cloudinary for permanent storage
+            $cloudinaryUrl = $this->cloudinary->uploadImage($request->file('image'), 'blogs');
+            
+            if ($cloudinaryUrl) {
+                $validated['image'] = $cloudinaryUrl;
+            } else {
+                // Fallback to local storage if Cloudinary upload fails
+                $validated['image'] = $request->file('image')->store('blogs', 'public');
+            }
         }
         $blog->update($validated);
         return redirect()->route('admin.blogs')->with('success', 'Blog updated successfully!');
@@ -126,7 +150,34 @@ class BlogController extends Controller
     // Admin: Delete blog
     public function destroy(Blog $blog)
     {
+        // Delete image if it exists
+        if ($blog->image) {
+            // If it's a Cloudinary URL, extract the public ID and delete it
+            if (strpos($blog->image, 'cloudinary.com') !== false) {
+                $this->deleteCloudinaryImage($blog->image);
+            } else {
+                // If it's a local file, delete it from local storage
+                Storage::disk('public')->delete($blog->image);
+            }
+        }
+        
         $blog->delete();
         return redirect()->route('admin.blogs')->with('success', 'Blog deleted successfully!');
+    }
+    
+    /**
+     * Extract the public ID from a Cloudinary URL and delete the image
+     *
+     * @param string $url
+     * @return void
+     */
+    private function deleteCloudinaryImage(string $url): void
+    {
+        // Extract public ID from Cloudinary URL
+        $pattern = '/cloudinary\.com\/.*\/(?:image|video)\/upload(?:\/[^\/]*)*\/(.+?)(?:\.[^\.]+)?$/i';
+        if (preg_match($pattern, $url, $matches)) {
+            $publicId = $matches[1]; // This is the public ID including folder
+            $this->cloudinary->deleteImage($publicId);
+        }
     }
 }

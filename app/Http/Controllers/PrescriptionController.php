@@ -8,9 +8,32 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
+use App\Services\CloudinaryService;
 
 class PrescriptionController extends Controller
 {
+    protected $cloudinary;
+    
+    public function __construct(CloudinaryService $cloudinary)
+    {
+        $this->cloudinary = $cloudinary;
+    }
+    
+    /**
+     * Extract the public ID from a Cloudinary URL and delete the image
+     *
+     * @param string $url
+     * @return void
+     */
+    private function deleteCloudinaryImage(string $url): void
+    {
+        // Extract public ID from Cloudinary URL
+        $pattern = '/cloudinary\.com\/.*\/(?:image|video)\/upload(?:\/[^\/]*)*\/(.+?)(?:\.[^\.]+)?$/i';
+        if (preg_match($pattern, $url, $matches)) {
+            $publicId = $matches[1]; // This is the public ID including folder
+            $this->cloudinary->deleteImage($publicId);
+        }
+    }
     public function index()
     {
         return Inertia::render('UploadPrescription');
@@ -37,7 +60,11 @@ class PrescriptionController extends Controller
 
             foreach ($prescriptionFiles as $file) {
                 try {
-                    $imagePath = $file->store('prescriptions', 'public');
+                    // Upload to Cloudinary for permanent storage
+                    $cloudinaryUrl = $this->cloudinary->uploadImage($file, 'prescriptions');
+                    
+                    // Set image path based on the upload result
+                    $imagePath = $cloudinaryUrl ?: $file->store('prescriptions', 'public');
 
                     // Create prescription record linked to the order
                     $prescriptions[] = Prescription::create([
@@ -50,7 +77,13 @@ class PrescriptionController extends Controller
                 } catch (\Exception $e) {
                     // If there's an error, delete any files that were uploaded
                     foreach ($prescriptions as $prescription) {
-                        Storage::disk('public')->delete($prescription->image_path);
+                        if (strpos($prescription->image_path, 'cloudinary.com') !== false) {
+                            // Delete from Cloudinary
+                            $this->deleteCloudinaryImage($prescription->image_path);
+                        } else {
+                            // Delete from local storage
+                            Storage::disk('public')->delete($prescription->image_path);
+                        }
                         $prescription->delete();
                     }
                     $order->delete();
@@ -66,7 +99,7 @@ class PrescriptionController extends Controller
             return back()->withErrors($e->errors());
         } catch (\Exception $e) {
             return back()->withErrors([
-                'error' => 'Failed to upload prescription. Please try again.'
+                'error' => 'Failed to upload prescription. Please try again. Details: ' . $e->getMessage()
             ]);
         }
     }
@@ -77,9 +110,16 @@ class PrescriptionController extends Controller
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($prescription) {
+                $imageUrl = $prescription->image_path;
+                
+                // Handle both Cloudinary and local storage URLs
+                if ($imageUrl && !strpos($imageUrl, 'cloudinary.com')) {
+                    $imageUrl = asset('storage/' . $imageUrl);
+                }
+                
                 return [
                     'id' => $prescription->id,
-                    'image_url' => $prescription->image_url,
+                    'image_url' => $imageUrl,
                     'status' => $prescription->status,
                     'status_label' => $prescription->status_label,
                     'notes' => $prescription->notes,
