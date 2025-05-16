@@ -81,10 +81,14 @@
   </div>
 </template>
 <script setup>
+import { computed } from 'vue';
+import { imageHelper } from '@/mixins/ImageHelper.js';
+
 // Define props for the component
 const props = defineProps({ order: Object });
 
-import { computed } from 'vue';
+// Import ImageHelper method
+const getImageUrl = imageHelper.methods.getImageUrl;
 
 const paymentStatusDisplay = computed(() => {
   const paymentMethod = (props.order.payment_method || '').toLowerCase();

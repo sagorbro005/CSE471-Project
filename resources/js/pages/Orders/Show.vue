@@ -44,7 +44,7 @@
           </h2>
           <div class="space-y-4">
             <div v-for="item in order.items" :key="item.id" class="flex items-center space-x-4 p-4 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300">
-              <img :src="item.image ? `/storage/${item.image}` : '/images/placeholder.png'" alt="Product Image" class="w-16 h-16 rounded object-cover" />
+              <img :src="item.image ? getImageUrl(item.image) : '/images/placeholder.png'" alt="Product Image" class="w-16 h-16 rounded object-cover" />
               <div class="flex-1 min-w-0">
                 <div class="font-medium text-gray-900">{{ item.name }}</div>
                 <div class="text-sm text-gray-500">Quantity: {{ item.quantity }}</div>
@@ -139,9 +139,12 @@
 import { Inertia } from '@inertiajs/inertia';
 import NavBar from '@/components/NavBar.vue'
 import Footer from '@/components/Footer.vue'
+import { imageHelper } from '@/mixins/ImageHelper.js'
 import { Link } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 import { computed } from 'vue';
+// Import the ImageHelper methods
+const getImageUrl = imageHelper.methods.getImageUrl
 // Order details page for a single order
 // Expects a prop `order` with all order info (see below)
 const props = defineProps({
