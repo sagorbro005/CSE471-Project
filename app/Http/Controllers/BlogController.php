@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\CloudinaryService;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class BlogController extends Controller
 {
@@ -173,11 +174,12 @@ class BlogController extends Controller
      */
     private function deleteCloudinaryImage(string $url): void
     {
-        // Extract public ID from Cloudinary URL
-        $pattern = '/cloudinary\.com\/.*\/(?:image|video)\/upload(?:\/[^\/]*)*\/(.+?)(?:\.[^\.]+)?$/i';
-        if (preg_match($pattern, $url, $matches)) {
-            $publicId = $matches[1]; // This is the public ID including folder
+        // Use the improved extractPublicId method from CloudinaryService
+        $publicId = $this->cloudinary->extractPublicId($url);
+        if ($publicId) {
             $this->cloudinary->deleteImage($publicId);
+        } else {
+            Log::error('Failed to extract public ID from URL', ['url' => $url]);
         }
     }
 }

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use App\Services\CloudinaryService;
+use Illuminate\Support\Facades\Log;
 
 class PrescriptionController extends Controller
 {
@@ -27,11 +28,12 @@ class PrescriptionController extends Controller
      */
     private function deleteCloudinaryImage(string $url): void
     {
-        // Extract public ID from Cloudinary URL
-        $pattern = '/cloudinary\.com\/.*\/(?:image|video)\/upload(?:\/[^\/]*)*\/(.+?)(?:\.[^\.]+)?$/i';
-        if (preg_match($pattern, $url, $matches)) {
-            $publicId = $matches[1]; // This is the public ID including folder
+        // Use the improved extractPublicId method from CloudinaryService
+        $publicId = $this->cloudinary->extractPublicId($url);
+        if ($publicId) {
             $this->cloudinary->deleteImage($publicId);
+        } else {
+            Log::error('Failed to extract public ID from URL', ['url' => $url]);
         }
     }
     public function index()
@@ -64,7 +66,13 @@ class PrescriptionController extends Controller
                     $cloudinaryUrl = $this->cloudinary->uploadImage($file, 'prescriptions');
                     
                     // Set image path based on the upload result
-                    $imagePath = $cloudinaryUrl ?: $file->store('prescriptions', 'public');
+                    if ($cloudinaryUrl) {
+                        Log::info('Successfully uploaded prescription to Cloudinary', ['file' => $file->getClientOriginalName()]);
+                        $imagePath = $cloudinaryUrl;
+                    } else {
+                        Log::warning('Failed to upload to Cloudinary, falling back to local storage', ['file' => $file->getClientOriginalName()]);
+                        $imagePath = $file->store('prescriptions', 'public');
+                    }
 
                     // Create prescription record linked to the order
                     $prescriptions[] = Prescription::create([
