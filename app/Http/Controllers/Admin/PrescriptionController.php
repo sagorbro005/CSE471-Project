@@ -60,7 +60,8 @@ class PrescriptionController extends Controller
                 'prescriptions' => $order->prescriptions->map(function($prescription) {
                     return [
                         'id' => $prescription->id,
-                        'image_url' => $prescription->image_path ? asset('storage/'.$prescription->image_path) : null,
+                        'image_url' => $prescription->image_url, // Use the accessor from the model
+                        'image_path' => $prescription->image_path, // Keep the original path for debugging
                         'notes' => $prescription->notes,
                         'status' => $prescription->status,
                     ];
@@ -95,7 +96,8 @@ class PrescriptionController extends Controller
             ],
             'images' => $order->prescriptions->map(function($prescription) {
                 return [
-                    'url' => $prescription->image_path ? asset('storage/'.$prescription->image_path) : null
+                    'url' => $prescription->image_url, // Use the accessor from the model
+                    'path' => $prescription->image_path // Keep the original path for debugging
                 ];
             }),
             // Collect all unique notes (non-empty) from all prescriptions in the order

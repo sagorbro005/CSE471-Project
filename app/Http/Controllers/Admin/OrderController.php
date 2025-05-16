@@ -78,6 +78,12 @@ class OrderController extends Controller
                 'gender' => $order->user->gender,
                 'age' => $order->user->date_of_birth ? \Carbon\Carbon::parse($order->user->date_of_birth)->age : null,
             ],
+            'delivery_address' => [
+                'address' => $order->address ?: $order->user->address,
+                'city' => $order->city ?: '',
+                'zip_code' => $order->zip_code ?: '',
+                'contact_phone' => $order->contact_phone ?: $order->user->phone,
+            ],
             'items' => $order->items->map(function($item) {
     return [
         'id' => $item->id,

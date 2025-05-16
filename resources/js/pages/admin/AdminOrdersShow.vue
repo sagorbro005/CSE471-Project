@@ -31,8 +31,14 @@
           <div v-if="order.user.gender"><b>Gender:</b> {{ order.user.gender }}</div>
           <div v-if="order.user.date_of_birth"><b>Date of Birth:</b> {{ order.user.date_of_birth }}</div>
           <div v-if="order.user.age"><b>Age:</b> {{ order.user.age }} years</div>
-          <div><b>Address:</b> {{ order.user.address }}</div>
+          <div><b>Default Address:</b> {{ order.user.address }}</div>
           <div><b>Order Date:</b> {{ order.date }} {{ order.time }}</div>
+          
+          <h4 class="font-semibold mt-4 mb-2">Delivery Address</h4>
+          <div><b>Address:</b> {{ order.delivery_address.address }}</div>
+          <div v-if="order.delivery_address.city"><b>City:</b> {{ order.delivery_address.city }}</div>
+          <div v-if="order.delivery_address.zip_code"><b>ZIP Code:</b> {{ order.delivery_address.zip_code }}</div>
+          <div><b>Contact Phone:</b> {{ order.delivery_address.contact_phone }}</div>
         </div>
         <div class="bg-gray-50 rounded p-4">
           <h4 class="font-semibold mb-2">Order Summary</h4>
