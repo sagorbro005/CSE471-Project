@@ -49,7 +49,6 @@ class PrescriptionController extends Controller
         $orders = $ordersQuery->orderByDesc('created_at')->paginate(10);
 
         $orders = $orders->through(function($order) {
-            // Convert date/time to Bangladesh time
             $createdAt = $order->created_at->copy()->timezone('Asia/Dhaka');
             return [
                 'id' => $order->id,
