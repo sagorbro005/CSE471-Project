@@ -74,7 +74,7 @@
             <td class="px-6 py-4">{{ item.quantity }}</td>
             <td class="px-6 py-4">৳{{ safeToFixed(item.price * item.quantity) }}</td>
             <td class="px-6 py-4">
-              <img :src="item.image ? `/storage/${item.image}` : '/images/placeholder.png'" alt="Product" class="w-16 h-16 object-cover rounded" />
+              <img :src="item.image ? getImageUrl(item.image) : '/images/placeholder.png'" alt="Product" class="w-16 h-16 object-cover rounded" />
             </td>
           </tr>
         </tbody>
@@ -88,9 +88,13 @@
 import { ref, computed } from 'vue';
 import { router, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import { imageHelper } from '@/mixins/ImageHelper.js';
 const props = defineProps({ order: Object });
 const orderStatus = ref(props.order.status);
 const updating = ref(false);
+
+// Import ImageHelper methods
+const { getImageUrl } = imageHelper.methods;
 
 const paymentStatusDisplay = computed(() => {
   const paymentMethod = (props.order.payment_method || '').toLowerCase();

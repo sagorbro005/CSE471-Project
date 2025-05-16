@@ -4,9 +4,6 @@
     <div class="sidebar-header">
       <img src="/logo/Medimart.png" alt="Medimart Logo" class="sidebar-logo">
       <h3 class="sidebar-title">Admin Panel</h3>
-      <button @click="$emit('close-sidebar')" class="close-sidebar">
-        <i class="fas fa-times"></i>
-      </button>
     </div>
 
     <nav>
@@ -71,8 +68,6 @@ function logout() {
   localStorage.removeItem('admin_logged_in');
   router.visit('/admin/login');
 }
-
-defineEmits(['close-sidebar']);
 </script>
 
 <style scoped>
@@ -84,21 +79,6 @@ defineEmits(['close-sidebar']);
   box-shadow: 2px 0 12px rgba(0,0,0,0.15);
   display: flex;
   flex-direction: column;
-  z-index: 30;
-  transition: transform 0.3s ease;
-}
-
-/* Close button for mobile */
-.close-sidebar {
-  display: none;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 20px;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  cursor: pointer;
 }
 
 .sidebar-header {
@@ -167,23 +147,5 @@ nav ul li {
   height: 1px;
   background: rgba(255,255,255,0.1);
   margin: 15px 20px;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .admin-sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    transform: translateX(-100%);
-  }
-  
-  .admin-sidebar.sidebar-open {
-    transform: translateX(0);
-  }
-  
-  .close-sidebar {
-    display: block;
-  }
 }
 </style>

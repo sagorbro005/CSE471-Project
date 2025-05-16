@@ -56,7 +56,7 @@
             <td class="px-6 py-4">
               <div class="flex flex-wrap gap-2">
                 <div v-for="item in order.items" :key="item.id" class="block w-24 h-24 relative">
-                  <img :src="item.image ? `/storage/${item.image}` : '/images/placeholder.png'" alt="Product" class="w-full h-full object-cover rounded" />
+                  <img :src="item.image ? getImageUrl(item.image) : '/images/placeholder.png'" alt="Product" class="w-full h-full object-cover rounded" />
                   <div class="absolute bottom-1 right-1 bg-white bg-opacity-80 px-2 py-1 rounded text-xs text-gray-800">
                     x{{ item.quantity }}
                   </div>
@@ -108,12 +108,14 @@
 // AdminOrdersIndex.vue
 // Shows all product orders for admin with search, filter, status update, and pagination
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import { imageHelper } from '@/mixins/ImageHelper.js';
 
 export default {
   name: 'AdminOrdersIndex',
   components: {
     AdminLayout
   },
+  mixins: [imageHelper],
   props: {
     orders: Object
   },
@@ -124,6 +126,10 @@ export default {
       successMessage: '',
       page: this.orders?.current_page || 1
     }
+  },
+  created() {
+    // Import the ImageHelper method
+    this.getImageUrl = imageHelper.methods.getImageUrl;
   },
   mounted() {
     // Initialize search and status from props if available (once, on mount)
