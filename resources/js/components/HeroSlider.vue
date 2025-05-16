@@ -3,7 +3,7 @@
     <!-- Slider Section -->
     <div class="relative overflow-hidden">
       <!-- Slides -->
-      <div class="relative h-[500px] w-full overflow-hidden">
+      <div class="relative h-[300px] sm:h-[350px] md:h-[400px] lg:h-[500px] w-full overflow-hidden">
         <transition-group name="fade" tag="div">
           <div v-for="(slide, idx) in slides" :key="slide.id" v-show="activeSlide === idx"
             class="absolute inset-0 transition-opacity duration-700">
@@ -13,15 +13,15 @@
       </div>
       <!-- Arrow Navigation -->
       <div class="absolute inset-y-0 left-0 z-10 flex items-center">
-        <button @click="prev" class="bg-black/30 hover:bg-black/50 text-white w-14 h-14 flex items-center justify-center rounded-r-xl transition-all duration-300 hover:w-16">
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button @click="prev" class="bg-black/30 hover:bg-black/50 text-white w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-r-xl transition-all duration-300 hover:w-12 md:hover:w-16">
+          <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
           </svg>
         </button>
       </div>
       <div class="absolute inset-y-0 right-0 z-10 flex items-center">
-        <button @click="next" class="bg-black/30 hover:bg-black/50 text-white w-14 h-14 flex items-center justify-center rounded-l-xl transition-all duration-300 hover:w-16">
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button @click="next" class="bg-black/30 hover:bg-black/50 text-white w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-l-xl transition-all duration-300 hover:w-12 md:hover:w-16">
+          <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
           </svg>
         </button>
@@ -38,15 +38,15 @@
     </div>
 
     <!-- Welcome Banner Section -->
-    <div class="welcome-banner w-full py-24 px-4 text-center text-white">
-      <h1 class="text-5xl font-bold mb-4">
+    <div class="welcome-banner w-full py-12 md:py-16 lg:py-24 px-4 text-center text-white">
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
         Welcome to <span class="text-yellow-400">MediMart</span>
       </h1>
-      <p class="text-xl max-w-2xl mx-auto mb-8">
+      <p class="text-base md:text-lg lg:text-xl max-w-2xl mx-auto mb-6 md:mb-8">
         Your One-Stop Health and Wellness Shop. We provide quality medicines and
         healthcare products right at your doorstep.
       </p>
-      <Link :href="'/products'" class="inline-block bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 px-8 rounded-full transition-colors duration-300">
+      <Link :href="'/products'" class="inline-block bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-6 md:py-3 md:px-8 rounded-full transition-colors duration-300">
         Browse Products <span class="ml-2">→</span>
       </Link>
     </div>

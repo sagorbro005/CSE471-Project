@@ -46,8 +46,18 @@ RUN chmod +x /var/www/html/docker/static-images.sh
 # Ensure public directory has proper permissions for images
 RUN chmod -R 755 /var/www/html/public
 
+# Create and set permissions for persistent storage volume
+RUN mkdir -p /var/www/html/storage/app/public/products
+RUN mkdir -p /var/www/html/storage/app/public/sliders
+RUN mkdir -p /var/www/html/storage/app/public/blogs
+RUN mkdir -p /var/www/html/storage/persistent
+RUN touch /var/www/html/storage/persistent/.keep
+
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Create volume for persistent storage
+VOLUME ["/var/www/html/storage/app/public", "/var/www/html/storage/persistent"]
 
 # Install dependencies
 RUN composer install --optimize-autoloader --no-dev

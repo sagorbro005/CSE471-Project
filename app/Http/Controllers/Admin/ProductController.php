@@ -58,7 +58,13 @@ class ProductController extends Controller
         $product->slug = Str::slug($validated['name']) . '-' . uniqid();
 
         if ($request->hasFile('image')) {
+            // Store in regular public storage
             $product->image = $request->file('image')->store('products', 'public');
+            
+            // Also store a backup copy in persistent storage
+            $file = $request->file('image');
+            $path = 'uploads/' . $product->image;
+            Storage::disk('local')->put('/persistent/' . $path, file_get_contents($file));
         }
 
         $product->save();
@@ -102,8 +108,16 @@ class ProductController extends Controller
             // Delete old image if exists
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
+                Storage::disk('local')->delete('/persistent/uploads/' . $product->image);
             }
+            
+            // Store in regular public storage
             $product->image = $request->file('image')->store('products', 'public');
+            
+            // Also store a backup copy in persistent storage
+            $file = $request->file('image');
+            $path = 'uploads/' . $product->image;
+            Storage::disk('local')->put('/persistent/' . $path, file_get_contents($file));
         }
 
         $product->save();
@@ -118,6 +132,7 @@ class ProductController extends Controller
     {
         if ($product->image) {
             Storage::disk('public')->delete($product->image);
+            Storage::disk('local')->delete('/persistent/uploads/' . $product->image);
         }
         $product->delete();
         return redirect()->route('admin.products')->with('success', 'Product deleted successfully!');
