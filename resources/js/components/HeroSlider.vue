@@ -3,7 +3,7 @@
     <!-- Slider Section -->
     <div class="relative overflow-hidden">
       <!-- Slides -->
-      <div class="relative h-[300px] sm:h-[350px] md:h-[400px] lg:h-[500px] w-full overflow-hidden">
+      <div class="relative h-[200px] sm:h-[250px] md:h-[300px] lg:h-[450px] w-full overflow-hidden">
         <transition-group name="fade" tag="div">
           <div v-for="(slide, idx) in slides" :key="slide.id" v-show="activeSlide === idx"
             class="absolute inset-0 transition-opacity duration-700">

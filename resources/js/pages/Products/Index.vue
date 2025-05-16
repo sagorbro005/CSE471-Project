@@ -65,10 +65,10 @@
       <div v-for="product in products.data" :key="product.id"
         class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
         <Link :href="route('products.show', product.slug)" class="block">
-          <div v-if="product.image" class="w-full h-32 bg-gray-100">
-            <img :src="getImageUrl(product.image)" :alt="product.name" class="w-full h-32 object-cover">
+          <div v-if="product.image" class="w-full h-40 bg-gray-100">
+            <img :src="getImageUrl(product.image)" :alt="product.name" class="w-full h-40 object-cover">
           </div>
-          <div v-else class="w-full h-32 bg-gray-100 flex items-center justify-center">
+          <div v-else class="w-full h-40 bg-gray-100 flex items-center justify-center">
             <i class="fas fa-image text-gray-400 text-4xl"></i>
           </div>
 

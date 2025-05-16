@@ -9,9 +9,16 @@ use App\Models\Category;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use App\Services\CloudinaryService;
 
 class ProductController extends Controller
 {
+    protected $cloudinary;
+    
+    public function __construct(CloudinaryService $cloudinary)
+    {
+        $this->cloudinary = $cloudinary;
+    }
     /**
      * Display a listing of the products for admin management.
      */
@@ -58,13 +65,15 @@ class ProductController extends Controller
         $product->slug = Str::slug($validated['name']) . '-' . uniqid();
 
         if ($request->hasFile('image')) {
-            // Store in regular public storage
-            $product->image = $request->file('image')->store('products', 'public');
+            // Upload image to Cloudinary for permanent storage
+            $cloudinaryUrl = $this->cloudinary->uploadImage($request->file('image'), 'products');
             
-            // Also store a backup copy in persistent storage
-            $file = $request->file('image');
-            $path = 'uploads/' . $product->image;
-            Storage::disk('local')->put('/persistent/' . $path, file_get_contents($file));
+            if ($cloudinaryUrl) {
+                $product->image = $cloudinaryUrl;
+            } else {
+                // Fallback to local storage if Cloudinary upload fails
+                $product->image = $request->file('image')->store('products', 'public');
+            }
         }
 
         $product->save();
@@ -107,17 +116,28 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             // Delete old image if exists
             if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-                Storage::disk('local')->delete('/persistent/uploads/' . $product->image);
+                // If it's a Cloudinary URL, extract the public ID and delete it
+                if (strpos($product->image, 'cloudinary.com') !== false) {
+                    // Extract public ID from URL
+                    $publicId = $this->extractCloudinaryPublicId($product->image);
+                    if ($publicId) {
+                        $this->cloudinary->deleteImage($publicId);
+                    }
+                } else {
+                    // If it's a local file, delete it from local storage
+                    Storage::disk('public')->delete($product->image);
+                }
             }
             
-            // Store in regular public storage
-            $product->image = $request->file('image')->store('products', 'public');
+            // Upload new image to Cloudinary for permanent storage
+            $cloudinaryUrl = $this->cloudinary->uploadImage($request->file('image'), 'products');
             
-            // Also store a backup copy in persistent storage
-            $file = $request->file('image');
-            $path = 'uploads/' . $product->image;
-            Storage::disk('local')->put('/persistent/' . $path, file_get_contents($file));
+            if ($cloudinaryUrl) {
+                $product->image = $cloudinaryUrl;
+            } else {
+                // Fallback to local storage if Cloudinary upload fails
+                $product->image = $request->file('image')->store('products', 'public');
+            }
         }
 
         $product->save();
@@ -131,10 +151,35 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         if ($product->image) {
-            Storage::disk('public')->delete($product->image);
-            Storage::disk('local')->delete('/persistent/uploads/' . $product->image);
+            // If it's a Cloudinary URL, extract the public ID and delete it
+            if (strpos($product->image, 'cloudinary.com') !== false) {
+                // Extract public ID from URL
+                $publicId = $this->extractCloudinaryPublicId($product->image);
+                if ($publicId) {
+                    $this->cloudinary->deleteImage($publicId);
+                }
+            } else {
+                // If it's a local file, delete it from local storage
+                Storage::disk('public')->delete($product->image);
+            }
         }
         $product->delete();
         return redirect()->route('admin.products')->with('success', 'Product deleted successfully!');
+    }
+    
+    /**
+     * Extract the public ID from a Cloudinary URL
+     *
+     * @param string $url
+     * @return string|null
+     */
+    private function extractCloudinaryPublicId(string $url): ?string
+    {
+        // Example URL: https://res.cloudinary.com/your-cloud-name/image/upload/v1589394838/products/abc123.jpg
+        $pattern = '/cloudinary\.com\/.*\/(?:image|video)\/upload(?:\/[^\/]*)*\/(.+?)(?:\.[^\.]+)?$/i';
+        if (preg_match($pattern, $url, $matches)) {
+            return $matches[1]; // This is the public ID including folder
+        }
+        return null;
     }
 }
