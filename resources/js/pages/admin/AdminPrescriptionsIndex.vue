@@ -54,8 +54,8 @@
             </td>
             <td class="px-6 py-4">
               <div class="flex flex-wrap gap-2">
-                <a v-for="(prescription, idx) in order.prescriptions" :key="prescription.id" :href="prescription.image_url" target="_blank" class="block w-12 h-12 relative">
-                  <img :src="prescription.image_url" alt="Prescription" class="w-full h-full object-cover rounded" />
+                <a v-for="(prescription, idx) in order.prescriptions" :key="prescription.id" :href="getImageUrl(prescription.image_path)" target="_blank" class="block w-12 h-12 relative">
+                  <img :src="getImageUrl(prescription.image_path)" alt="Prescription" class="w-full h-full object-cover rounded" />
                 </a>
               </div>
               <div v-if="order.prescriptions.length && order.prescriptions[0].notes" class="mt-2 text-sm text-gray-500">
@@ -104,12 +104,14 @@
 
 <script>
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import { imageHelper } from '@/mixins/ImageHelper.js';
 
 export default {
   name: 'AdminPrescriptionsIndex',
   components: {
     AdminLayout
   },
+  mixins: [imageHelper],
   props: {
     orders: Object
   },

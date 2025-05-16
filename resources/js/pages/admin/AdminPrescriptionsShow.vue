@@ -1,4 +1,5 @@
 <template>
+  <AdminLayout>
   <div class="container mx-auto px-4 py-6">
     <a href="/admin/prescriptions" class="text-blue-600 hover:underline mb-4 inline-block">&lt; Back to Prescriptions</a>
     <div v-if="prescription" class="bg-white rounded-lg shadow p-8">
@@ -28,8 +29,8 @@
       <div class="mb-6">
         <h3 class="font-semibold mb-2">Prescription Images</h3>
         <div class="flex flex-wrap gap-4">
-          <a v-for="(img, idx) in prescription.images" :key="idx" :href="img.url" target="_blank">
-            <img :src="img.url" class="w-32 h-32 object-cover rounded border" alt="Prescription Image" />
+          <a v-for="(img, idx) in prescription.images" :key="idx" :href="getImageUrl(img.path)" target="_blank">
+            <img :src="getImageUrl(img.path)" class="w-32 h-32 object-cover rounded border" alt="Prescription Image" />
           </a>
         </div>
       </div>
@@ -43,11 +44,19 @@
     </div>
     <div v-else class="text-center text-gray-500">Loading...</div>
   </div>
+  </AdminLayout>
 </template>
 
 <script>
+import AdminLayout from '@/layouts/AdminLayout.vue';
+import { imageHelper } from '@/mixins/ImageHelper.js';
+
 export default {
   name: 'AdminPrescriptionsShow',
+  components: {
+    AdminLayout
+  },
+  mixins: [imageHelper],
   props: {
     prescription: Object
   },

@@ -20,7 +20,7 @@
         <tbody>
           <tr v-for="blog in blogs" :key="blog.id">
             <td>
-              <img v-if="blog.image" :src="`/storage/${blog.image}`" alt="Blog Image" class="blog-thumb" />
+              <img v-if="blog.image" :src="getImageUrl(blog.image)" alt="Blog Image" class="blog-thumb" />
               <span v-else class="no-img">No Image</span>
             </td>
             <td>{{ blog.title }}</td>
@@ -85,10 +85,14 @@
 import { ref } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
 import AdminSidebar from './AdminSidebar.vue';
+import { imageHelper } from '@/mixins/ImageHelper.js';
 
 const page = usePage();
 const blogs = ref(page.props.blogs ?? []);
 const categories = page.props.categories ?? [];
+
+// Import ImageHelper method for displaying Cloudinary images
+const { getImageUrl } = imageHelper.methods;
 
 const showModal = ref(false);
 const editMode = ref(false);
