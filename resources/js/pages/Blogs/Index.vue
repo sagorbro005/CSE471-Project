@@ -44,7 +44,7 @@
         <div v-for="blog in filteredBlogs" 
              :key="blog.id" 
              class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-lg transition">
-          <img :src="blog.image ? `/storage/${blog.image}` : '/images/no-image.png'"
+          <img :src="blog.image ? getImageUrl(blog.image) : '/images/no-image.png'"
                :alt="blog.title"
                class="w-full h-48 object-cover">
           <div class="p-6">
@@ -84,6 +84,7 @@ import Footer from '@/components/Footer.vue';
 import { Link } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import Pagination from '../../components/Pagination.vue'
+import { imageHelper } from '@/mixins/ImageHelper.js';
 
 export default {
   components: {
@@ -156,6 +157,9 @@ export default {
       handleSearch()
     }
 
+    // Import ImageHelper methods
+    const { getImageUrl } = imageHelper.methods;
+    
     const truncateText = (text, length) => {
       if (text.length <= length) return text
       return text.substr(0, length) + '...'
@@ -178,7 +182,8 @@ export default {
       selectCategory,
       clearSearch,
       truncateText,
-      formatDate
+      formatDate,
+      getImageUrl
     }
   }
 }

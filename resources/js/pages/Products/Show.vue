@@ -20,7 +20,7 @@
         <!-- Product Image -->
         <div>
           <div v-if="product.image" class="w-full h-96 bg-gray-100 rounded-lg">
-            <img :src="`/storage/${product.image}`" :alt="product.name" class="w-full h-96 object-cover rounded-lg">
+            <img :src="getImageUrl(product.image)" :alt="product.name" class="w-full h-96 object-cover rounded-lg">
           </div>
           <div v-else class="w-full h-96 bg-gray-100 flex items-center justify-center rounded-lg">
             <i class="fas fa-image text-gray-400 text-6xl"></i>
@@ -146,7 +146,7 @@
                 :href="route('products.show', relatedProduct.slug)" 
                 class="block group">
             <div v-if="relatedProduct.image" class="w-full h-48 bg-gray-100 rounded-lg mb-2">
-              <img :src="`/storage/${relatedProduct.image}`" :alt="relatedProduct.name" class="w-full h-48 object-cover rounded-lg mb-2">
+              <img :src="getImageUrl(relatedProduct.image)" :alt="relatedProduct.name" class="w-full h-48 object-cover rounded-lg mb-2">
             </div>
             <div v-else class="w-full h-48 bg-gray-100 flex items-center justify-center rounded-lg mb-2">
               <i class="fas fa-image text-gray-400 text-4xl"></i>
@@ -166,6 +166,7 @@ import { ref, computed, watch } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/Footer.vue';
+import { imageHelper } from '@/mixins/ImageHelper.js';
 
 // Props from controller
 const props = defineProps({
@@ -185,6 +186,9 @@ const sortedReviews = computed(() => {
   if (!props.product.reviews) return [];
   return [...props.product.reviews].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 });
+
+// Import ImageHelper methods
+const { getImageUrl } = imageHelper.methods;
 
 // Methods
 const formatPrice = (price) => {

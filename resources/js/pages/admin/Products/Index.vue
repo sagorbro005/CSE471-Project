@@ -32,7 +32,7 @@
         <tbody class="bg-white divide-y divide-gray-200">
           <tr v-for="product in products.data" :key="product.id" class="hover:bg-gray-50">
             <td class="px-4 py-3">
-              <img v-if="product.image" :src="`/storage/${product.image}`" :alt="product.name" class="h-10 w-10 object-cover rounded" />
+              <img v-if="product.image" :src="getImageUrl(product.image)" :alt="product.name" class="h-10 w-10 object-cover rounded" />
               <div v-else class="h-10 w-10 bg-gray-100 rounded flex items-center justify-center">
                 <i class="fas fa-image text-gray-400"></i>
               </div>
@@ -78,6 +78,7 @@
 import { router, Link, usePage } from '@inertiajs/vue3';
 import Pagination from '@/components/Pagination.vue';
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import { imageHelper } from '@/mixins/ImageHelper.js';
 
 // Props from controller
 const props = defineProps({
@@ -86,6 +87,9 @@ const props = defineProps({
 
 // Flash messages
 const flash = usePage().props.flash || {};
+
+// Import ImageHelper methods
+const { getImageUrl } = imageHelper.methods;
 
 // Format price helper
 function formatPrice(price) {

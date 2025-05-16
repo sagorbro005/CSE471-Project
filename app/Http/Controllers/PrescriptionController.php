@@ -56,8 +56,17 @@ class PrescriptionController extends Controller
             // Create a single order for all uploaded prescriptions
             $order = Order::create([
                 'user_id' => auth()->id(),
-                'status' => 'pending',
-                // Add other required order fields if necessary (set default or null)
+                'status' => 'Pending', // Changed to uppercase to match enum definition in migration
+                'subtotal' => 0.00,
+                'delivery_charge' => 0.00,
+                'total' => 0.00,
+                // Add other required order fields with default values
+            ]);
+            
+            // Log the created order to help diagnose any issues
+            Log::info('Created new order for prescription upload', [
+                'order_id' => $order->id,
+                'user_id' => auth()->id()
             ]);
 
             foreach ($prescriptionFiles as $file) {

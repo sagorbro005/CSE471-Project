@@ -81,7 +81,7 @@
         <div v-if="form.currentImage">
           <label class="block text-sm font-medium text-gray-700">Current Image</label>
           <div class="mt-2">
-            <img :src="`/storage/${form.currentImage}`" :alt="form.name" class="h-32 w-32 object-cover rounded">
+            <img :src="getImageUrl(form.currentImage)" :alt="form.name" class="h-32 w-32 object-cover rounded">
           </div>
         </div>
       </div>
@@ -107,6 +107,7 @@ import { ref } from 'vue';
 import { router, Link } from '@inertiajs/vue3';
 import ErrorMsg from '@/components/ErrorMsg.vue';
 import AdminLayout from '@/layouts/AdminLayout.vue';
+import { imageHelper } from '@/mixins/ImageHelper.js';
 
 // Props from controller
 const props = defineProps({
@@ -114,6 +115,9 @@ const props = defineProps({
   categories: Array,
   errors: Object
 });
+
+// Import ImageHelper methods
+const { getImageUrl } = imageHelper.methods;
 
 // Form state, initialized with product data
 const form = ref({

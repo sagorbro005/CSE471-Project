@@ -132,7 +132,7 @@
             <div class="flex items-start">
               <div class="flex-shrink-0 w-12 h-12 rounded overflow-hidden mr-3">
                 <img
-                  :src="item.product.image ? `/storage/${item.product.image}` : '/images/placeholder.png'"
+                  :src="item.product.image ? getImageUrl(item.product.image) : '/images/placeholder.png'"
                   :alt="item.product.name"
                   class="w-full h-full object-cover"
                 >
@@ -174,6 +174,7 @@ import { ref, computed, watch, onMounted } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/Footer.vue';
+import { imageHelper } from '@/mixins/ImageHelper.js';
 
 const props = defineProps({
   cartItems: Array,
@@ -376,6 +377,9 @@ function submitCOD(e) {
     }
   });
 }
+
+// Import ImageHelper methods
+const { getImageUrl } = imageHelper.methods;
 
 // Card and mobile types
 const cardTypes = [

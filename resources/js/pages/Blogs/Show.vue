@@ -5,8 +5,8 @@
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <!-- Blog Header -->
         <div class="relative mb-4 overflow-hidden rounded shadow-lg">
-          <!-- Use the exact same image path format as the Index page -->
-          <img :src="blog.image ? `/storage/${blog.image}` : '/images/no-image.png'"
+          <!-- Updated to use ImageHelper for proper URL handling -->
+          <img :src="blog.image ? getImageUrl(blog.image) : '/images/no-image.png'"
                :alt="blog.title" 
                class="w-full h-96 object-cover">
           <div class="absolute inset-0 bg-black bg-opacity-30 flex items-end"></div>
@@ -33,7 +33,7 @@
                :key="relatedBlog.id" 
                class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-lg transition">
             <Link :href="route('blogs.show', relatedBlog.id)">
-              <img :src="relatedBlog.image ? `/storage/${relatedBlog.image}` : '/images/no-image.png'" 
+              <img :src="relatedBlog.image ? getImageUrl(relatedBlog.image) : '/images/no-image.png'" 
                    :alt="relatedBlog.title" 
                    class="w-full h-48 object-cover">
               <div class="p-6">
@@ -57,6 +57,8 @@ import { Link } from '@inertiajs/vue3'
 import NavBar from '@/components/NavBar.vue'
 import Footer from '@/components/Footer.vue'
 
+import { imageHelper } from '@/mixins/ImageHelper.js';
+
 export default {
   components: {
     Link,
@@ -76,6 +78,9 @@ export default {
   },
 
   setup() {
+    // Import image helper method
+    const { getImageUrl } = imageHelper.methods;
+    
     const truncateText = (text, length) => {
       if (text.length <= length) return text
       return text.substr(0, length) + '...'
@@ -91,7 +96,8 @@ export default {
 
     return {
       truncateText,
-      formatDate
+      formatDate,
+      getImageUrl
     }
   }
 }

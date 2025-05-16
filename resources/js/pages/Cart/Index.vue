@@ -57,7 +57,7 @@
                   <div class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
                     <Link :href="route('products.show', item.product.slug)">
                       <img 
-                        :src="item.product.image ? `/storage/${item.product.image}` : '/images/placeholder.png'" 
+                        :src="item.product.image ? getImageUrl(item.product.image) : '/images/placeholder.png'" 
                         :alt="item.product.name"
                         class="w-full h-full object-cover hover:opacity-75 transition-opacity"
                       >
@@ -182,6 +182,7 @@ import { ref, computed, watch, onMounted } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import NavBar from '@/components/NavBar.vue';
 import Footer from '@/components/Footer.vue';
+import { imageHelper } from '@/mixins/ImageHelper.js';
 
 // Flash success message logic
 const page = usePage();
@@ -210,6 +211,13 @@ const props = defineProps({
 
 // Local reactive state for cart items
 const items = ref(props.cartItems.map(item => ({ ...item })));
+
+// Import ImageHelper methods
+const { getImageUrl } = imageHelper.methods;
+
+const isCartEmpty = computed(() => {
+  return !cartItems.value || cartItems.value.length === 0;
+});
 
 // Sync items with props.cartItems after every Inertia reload
 watch(
